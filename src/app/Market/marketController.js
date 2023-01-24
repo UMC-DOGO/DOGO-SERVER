@@ -59,7 +59,6 @@ exports.patchMarket = async function (req, res) {
   //가격 체크
   if (!price) return res.send(errResponse(baseResponse.MARKET_PRICE_EMPTY));
 
-  //밑에추가
   const editMarketInfo = await marketService.editMarket(
     marketId,
     title,
