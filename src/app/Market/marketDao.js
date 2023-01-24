@@ -14,7 +14,7 @@ const insertMarket = async (connection, insertMarketParams) => {
 
 //1.중고시장 게시글 전체 조회
 const selectMarket = async (connection) => {
-  //---유저사는 지역 첨부해야함
+  //---join활용해서 유저사는 지역 첨부해야함
   const selectMarketQuery = `
     SELECT title,price,sale,img,regTime 
     From marketPosting`;
@@ -26,7 +26,7 @@ const selectMarket = async (connection) => {
 
 //2.중고시장 게시글 세부 조회
 const selectMarketId = async (connection, marketId) => {
-  //---유저사는 지역 첨부
+  //---join활용해서 유저사는 지역 첨부
   const selectMarketIdQuery = `
     SELECT title,content,price,sale,img,regTime 
     From marketPosting
