@@ -179,6 +179,23 @@ module.exports = {
     message: "marketId를 입력해주세요",
   },
 
+  //Board error
+  BOARD_TITLE_EMPTY: {
+    isSuccess: false,
+    code: 9004,
+    message: "게시글의 제목을 입력해주세요.",
+  },
+  BOARD_CONTENT_EMPTY: {
+    isSuccess: false,
+    code: 9005,
+    message: "게시글의 내용을 입력해주세요.",
+  },
+  BOARD_BOARDID_EMPTY: {
+    isSuccess: false,
+    code: 9006,
+    message: "boardId를 입력해주세요",
+  },
+
   //Connection, Transaction 등의 서버 오류
   DB_ERROR: { isSuccess: false, code: 4000, message: "데이터 베이스 에러" },
   SERVER_ERROR: { isSuccess: false, code: 4001, message: "서버 에러" },
