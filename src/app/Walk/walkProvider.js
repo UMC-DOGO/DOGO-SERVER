@@ -13,8 +13,7 @@ exports.retrieveWalkList = async function (regionId) {
         return walkListResult;
   
   };
-  
-  // 후기 조회
+
   exports.retrieveReviewList = async function (walkId) {
 
       const connection = await pool.getConnection(async (conn) => conn);
@@ -25,7 +24,6 @@ exports.retrieveWalkList = async function (regionId) {
   };
 
   
-  //피드백 조회
   exports.retriveFeedbackList = async function (walkId) {
 
       const connection = await pool.getConnection(async (conn) => conn);
