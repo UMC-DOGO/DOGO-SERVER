@@ -13,21 +13,37 @@ const {connect} = require("http2");
 
 // Service: Create, Update, Delete 비즈니스 로직 처리
 
-exports.createUser = async function (email, password, nickname) {
-    try {
-        // 이메일 중복 확인
-        const emailRows = await userProvider.emailCheck(email);
-        if (emailRows.length > 0)
-            return errResponse(baseResponse.SIGNUP_REDUNDANT_EMAIL);
+// exports.createUser = async function (email, nickname, password, address, age, gender, breed, dogAge, introduce, profileImage,status) {
+//     try {
+//         // 이메일 중복 확인
+//         const emailRows = await userProvider.emailCheck(email);
+//         if (emailRows.length > 0)
+//             return errResponse(baseResponse.SIGNUP_REDUNDANT_EMAIL);
 
-        // 비밀번호 암호화
-        const hashedPassword = await crypto
-            .createHash("sha512")
-            .update(password)
-            .digest("hex");
+//         // 비밀번호 암호화
+//         const hashedPassword = await crypto
+//             .createHash("sha512")
+//             .update(password)
+//             .digest("hex");
 
-        const insertUserInfoParams = [email, hashedPassword, nickname];
+//         const insertUserInfoParams = [email, hashedPassword, nickname];
 
+//         const connection = await pool.getConnection(async (conn) => conn);
+
+//         const userIdResult = await userDao.insertUserInfo(connection, insertUserInfoParams);
+//         console.log(`추가된 회원 : ${userIdResult[0].insertId}`)
+//         connection.release();
+//         return response(baseResponse.SUCCESS);
+
+
+//     } catch (err) {
+//         logger.error(`App - createUser Service error\n: ${err.message}`);
+//         return errResponse(baseResponse.DB_ERROR);
+//     }
+// };
+exports.createUser = async function (email, nickname, password, address, age, gender, breed, dogAge, introduce, profileImage,status) {
+    try{
+        const insertUserInfoParams = [email, nickname, password, address, age, gender, breed, dogAge, introduce, profileImage,status];
         const connection = await pool.getConnection(async (conn) => conn);
 
         const userIdResult = await userDao.insertUserInfo(connection, insertUserInfoParams);
@@ -35,13 +51,11 @@ exports.createUser = async function (email, password, nickname) {
         connection.release();
         return response(baseResponse.SUCCESS);
 
-
-    } catch (err) {
+    }catch(err) {
         logger.error(`App - createUser Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);
     }
 };
-
 
 // TODO: After 로그인 인증 방법 (JWT)
 exports.postSignIn = async function (email, password) {
