@@ -25,25 +25,30 @@ exports.postUsers = async function (req, res) {
   /**
    * Body: email, password, nickname
    */
-  const { email, password, nickname } = req.body;
-
+  const { nickname, address, age, gender, breed, dogAge, introduce, profileImage,status, email, password } = req.body;
+  let regPass = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
   // 빈 값 체크
   if (!email) return res.send(response(baseResponse.SIGNUP_EMAIL_EMPTY));
 
   // 길이 체크
   if (email.length > 30)
     return res.send(response(baseResponse.SIGNUP_EMAIL_LENGTH));
-
-  // 형식 체크 (by 정규표현식)
+  if(introduce > 20)
+  return res.send(response(baseResponse.SIGNUP_INTRODUCE_LENGTH));
+  if(nickname > 7)
+  return res.send(response(baseResponse.SIGNUP_NICKNAME_LENGTH));
+  //password 길이 + 형식 체크
+  if(password.length >6 && !regPass.test(password)) {
+    return res.send(response(baseResponse.SIGNUP_PASSWORD_LENGTH));
+  } 
+  
+    // 형식 체크 (by 정규표현식)
   if (!regexEmail.test(email))
     return res.send(response(baseResponse.SIGNUP_EMAIL_ERROR_TYPE));
-
-  // 기타 등등 - 추가하기
-
+   
+  
   const signUpResponse = await userService.createUser(
-    email,
-    password,
-    nickname
+    nickname,address, age, gender, breed, dogAge, introduce, profileImage,status, email,password
   );
 
   return res.send(signUpResponse);
@@ -58,6 +63,7 @@ exports.getUsers = async function (req, res) {
   /**
    * Query String: email
    */
+
   const email = req.query.email;
 
   if (!email) {
@@ -69,6 +75,7 @@ exports.getUsers = async function (req, res) {
     const userListByEmail = await userProvider.retrieveUserList(email);
     return res.send(response(baseResponse.SUCCESS, userListByEmail));
   }
+  
 };
 
 /**

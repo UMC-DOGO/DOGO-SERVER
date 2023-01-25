@@ -43,7 +43,7 @@ module.exports = {
   SIGNUP_PASSWORD_LENGTH: {
     isSuccess: false,
     code: 2005,
-    message: "비밀번호는 6~20자리를 입력해주세요.",
+    message: "비밀번호는 7자리 이상 특수문자를 포함해주세요.",
   },
   SIGNUP_NICKNAME_EMPTY: {
     isSuccess: false,
@@ -55,7 +55,16 @@ module.exports = {
     code: 2007,
     message: "닉네임은 최대 20자리를 입력해주세요.",
   },
-
+  SIGNUP_INTRODUCE_LENGTH: {
+    isSuccess: false,
+    code: 2019,
+    message: "한줄 소개는 20자 미만으로 입력해주세요.",
+  },
+  SIGNUP_NICKNAME_LENGTH: {
+    isSuccess: false,
+    code: 2020,
+    message: "닉네임은 8자 미만으로 입력해주세요.",
+  },
   SIGNIN_EMAIL_EMPTY: {
     isSuccess: false,
     code: 2008,
@@ -76,7 +85,7 @@ module.exports = {
     code: 2011,
     message: "비밀번호를 입력 해주세요.",
   },
-
+  
   USER_USERID_EMPTY: {
     isSuccess: false,
     code: 2012,

@@ -1,7 +1,7 @@
 // 모든 유저 조회
 async function selectUser(connection) {
   const selectUserListQuery = `
-                SELECT email, nickname 
+                SELECT *
                 FROM UserInfo;
                 `;
   const [userRows] = await connection.query(selectUserListQuery);
@@ -30,11 +30,11 @@ async function selectUserId(connection, userId) {
   return userRow;
 }
 
-// 유저 생성
+// 유저 생성(회원가입)
 async function insertUserInfo(connection, insertUserInfoParams) {
   const insertUserInfoQuery = `
-        INSERT INTO UserInfo(email, password, nickname)
-        VALUES (?, ?, ?);
+        INSERT INTO UserInfo(nickname, address, age, gender, breed, dogAge, introduce, profileImage,status,email,password)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     `;
   const insertUserInfoRow = await connection.query(
     insertUserInfoQuery,

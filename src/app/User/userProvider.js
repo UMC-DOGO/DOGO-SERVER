@@ -3,7 +3,15 @@ const { logger } = require("../../../config/winston");
 
 const userDao = require("./userDao");
 
-// Provider: Read 비즈니스 로직 처리
+// Provider: Read 비즈니스 로직 처리(select)
+//전체 회원정보 조회하기
+exports.retrieveUserList = async function (userId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+      const userListResult = await userDao.selectUser(connection);
+      connection.release();
+  
+      return userListResult;
+};
 
 exports.retrieveUserList = async function (email) {
   if (!email) {
