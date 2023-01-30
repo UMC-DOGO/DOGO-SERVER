@@ -12,4 +12,6 @@ module.exports = function (app) {
   app.delete("/board/:boardId", board.deleteBoard);
   // 4. 커뮤니티 수정
   app.patch("/board/:boardId", board.patchBoard);
+  //5. 게시물 신고
+  app.patch("")
 };

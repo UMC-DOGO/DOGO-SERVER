@@ -23,7 +23,7 @@ module.exports = {
   SIGNUP_EMAIL_EMPTY: {
     isSuccess: false,
     code: 2001,
-    message: "이메일을 입력해주세요",
+    message: "입력하지 않은 폼이 있습니다.",
   },
   SIGNUP_EMAIL_LENGTH: {
     isSuccess: false,
