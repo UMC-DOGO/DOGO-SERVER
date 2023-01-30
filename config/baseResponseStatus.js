@@ -23,7 +23,7 @@ module.exports = {
   SIGNUP_EMAIL_EMPTY: {
     isSuccess: false,
     code: 2001,
-    message: "이메일을 입력해주세요",
+    message: "입력하지 않은 폼이 있습니다.",
   },
   SIGNUP_EMAIL_LENGTH: {
     isSuccess: false,
@@ -43,7 +43,7 @@ module.exports = {
   SIGNUP_PASSWORD_LENGTH: {
     isSuccess: false,
     code: 2005,
-    message: "비밀번호는 6~20자리를 입력해주세요.",
+    message: "비밀번호는 7자리 이상 특수문자를 포함해주세요.",
   },
   SIGNUP_NICKNAME_EMPTY: {
     isSuccess: false,
@@ -55,7 +55,16 @@ module.exports = {
     code: 2007,
     message: "닉네임은 최대 20자리를 입력해주세요.",
   },
-
+  SIGNUP_INTRODUCE_LENGTH: {
+    isSuccess: false,
+    code: 2019,
+    message: "한줄 소개는 20자 미만으로 입력해주세요.",
+  },
+  SIGNUP_NICKNAME_LENGTH: {
+    isSuccess: false,
+    code: 2020,
+    message: "닉네임은 8자 미만으로 입력해주세요.",
+  },
   SIGNIN_EMAIL_EMPTY: {
     isSuccess: false,
     code: 2008,
@@ -76,7 +85,7 @@ module.exports = {
     code: 2011,
     message: "비밀번호를 입력 해주세요.",
   },
-
+  
   USER_USERID_EMPTY: {
     isSuccess: false,
     code: 2012,
@@ -168,6 +177,23 @@ module.exports = {
     isSuccess: false,
     code: 9003,
     message: "marketId를 입력해주세요",
+  },
+
+  //Board error
+  BOARD_TITLE_EMPTY: {
+    isSuccess: false,
+    code: 9004,
+    message: "게시글의 제목을 입력해주세요.",
+  },
+  BOARD_CONTENT_EMPTY: {
+    isSuccess: false,
+    code: 9005,
+    message: "게시글의 내용을 입력해주세요.",
+  },
+  BOARD_BOARDID_EMPTY: {
+    isSuccess: false,
+    code: 9006,
+    message: "boardId를 입력해주세요",
   },
 
   //Connection, Transaction 등의 서버 오류

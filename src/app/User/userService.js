@@ -13,7 +13,7 @@ const {connect} = require("http2");
 
 // Service: Create, Update, Delete 비즈니스 로직 처리
 
-exports.createUser = async function (email, password, nickname) {
+exports.createUser = async function (email, nickname, password, address, age, gender, breed, dogAge, introduce, profileImage,status) {
     try {
         // 이메일 중복 확인
         const emailRows = await userProvider.emailCheck(email);
@@ -26,7 +26,7 @@ exports.createUser = async function (email, password, nickname) {
             .update(password)
             .digest("hex");
 
-        const insertUserInfoParams = [email, hashedPassword, nickname];
+        const insertUserInfoParams = [email, nickname, hashedPassword, address, age, gender, breed, dogAge, introduce, profileImage,status];
 
         const connection = await pool.getConnection(async (conn) => conn);
 
@@ -48,23 +48,27 @@ exports.postSignIn = async function (email, password) {
     try {
         // 이메일 여부 확인
         const emailRows = await userProvider.emailCheck(email);
+        // console.log(emailRows.length);
         if (emailRows.length < 1) return errResponse(baseResponse.SIGNIN_EMAIL_WRONG);
 
         const selectEmail = emailRows[0].email
 
         // 비밀번호 확인
-        const hashedPassword = await crypto
-            .createHash("sha512")
-            .update(password)
-            .digest("hex");
+        // const hashedPassword = await crypto
+        //     .createHash("sha512")
+        //     .update(password)
+        //     .digest("hex");
 
-        const selectUserPasswordParams = [selectEmail, hashedPassword];
+        const selectUserPasswordParams = [selectEmail, password];
+        // const selectUserPasswordParams = [selectEmail, hashedPassword];
         const passwordRows = await userProvider.passwordCheck(selectUserPasswordParams);
 
-        if (passwordRows[0].password !== hashedPassword) {
+        // if (passwordRows[0].password !== hashedPassword) {
+        //     return errResponse(baseResponse.SIGNIN_PASSWORD_WRONG);
+        // }
+        if (passwordRows[0].password !== password) {
             return errResponse(baseResponse.SIGNIN_PASSWORD_WRONG);
         }
-
         // 계정 상태 확인
         const userInfoRows = await userProvider.accountCheck(email);
 
@@ -74,12 +78,12 @@ exports.postSignIn = async function (email, password) {
             return errResponse(baseResponse.SIGNIN_WITHDRAWAL_ACCOUNT);
         }
 
-        console.log(userInfoRows[0].id) // DB의 userId
+        console.log(userInfoRows[0].userId) // DB의 userId
 
         //토큰 생성 Service
         let token = await jwt.sign(
             {
-                userId: userInfoRows[0].id,
+                userId: userInfoRows[0].userId,
             }, // 토큰의 내용(payload)
             secret_config.jwtsecret, // 비밀키
             {
@@ -88,7 +92,7 @@ exports.postSignIn = async function (email, password) {
             } // 유효 기간 365일
         );
 
-        return response(baseResponse.SUCCESS, {'userId': userInfoRows[0].id, 'jwt': token});
+        return response(baseResponse.SUCCESS, {'userId': userInfoRows[0].userId, 'jwt': token});
 
     } catch (err) {
         logger.error(`App - postSignIn Service error\n: ${err.message} \n${JSON.stringify(err)}`);
@@ -96,11 +100,11 @@ exports.postSignIn = async function (email, password) {
     }
 };
 
-exports.editUser = async function (id, nickname) {
+exports.editUser = async function (userId, nickname) {
     try {
-        console.log(id)
+        console.log(userId);
         const connection = await pool.getConnection(async (conn) => conn);
-        const editUserResult = await userDao.updateUserInfo(connection, id, nickname)
+        const editUserResult = await userDao.updateUserInfo(connection, userId, nickname)
         connection.release();
 
         return response(baseResponse.SUCCESS);
