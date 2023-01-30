@@ -22,6 +22,6 @@ module.exports = function () {
   require("../src/app/User/userRoute")(app);
   require("../src/app/Market/marketRoute")(app);
   require("../src/app/Board/boardRoute")(app);
-
+  require("../src/app/Chat/chatRoute")(app);
   return app;
 };

@@ -6,8 +6,8 @@ const pool = mysql.createPool({
   host: "localhost",
   user: "root",
   port: "3306",
-  password: "kelly1530*",
-  database: "minjuu",
+  password: "1234",
+  database: "market",
 });
 
 module.exports = {
