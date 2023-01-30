@@ -26,42 +26,42 @@ const selectBoard = async (connection) => {
 };
 
 //2.커뮤니티 게시글 세부 조회
-const selectBoardId = async (connection, boardId) => {
+const selectBoardId = async (connection, postId) => {
   //---join활용해서 유저사는 지역 첨부
   const selectBoardIdQuery = `
       SELECT title,content,img,regTime 
       From posting
-      WHERE boardId=?`;
+      WHERE postId=?`;
 
-  const [boardRow] = await connection.query(selectBoardIdQuery, boardId);
+  const [boardRow] = await connection.query(selectBoardIdQuery, postId);
 
   return boardRow;
 };
 
 //3.커뮤니티 게시글 삭제
-const deleteBoard = async (connection, boardId) => {
+const deleteBoard = async (connection, postId) => {
   const deleteBoardQuery = `
       DELETE FROM posting
-      WHERE boardId=?
+      WHERE postId=?
     `;
 
-  const deleteBoardResult = await connection.query(deleteBoardQuery, boardId);
+  const deleteBoardResult = await connection.query(deleteBoardQuery, postId);
   return deleteBoardResult;
 };
 
 //4.커뮤니티 게시글 수정
-const patchBoard = async (connection, boardId, title, content, img) => {
+const patchBoard = async (connection, postId, title, content, img) => {
   const patchBoardQuery = `
       UPDATE posting
       SET title = ?,content=?,img=?
-      WHERE boardId=?
+      WHERE postId=?
     `;
 
   const patchBoardResult = await connection.query(patchBoardQuery, [
     title,
     content,
     img,
-    boardId,
+    postId,
   ]);
   return patchBoardResult[0];
 };

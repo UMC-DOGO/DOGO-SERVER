@@ -28,17 +28,17 @@ exports.getBoards = async function (req, res) {
 
 // 2. 게시글 세부 조회
 exports.getBoard = async function (req, res) {
-  const boardId = req.params.boardId;
-  if (!boardId) return res.send(errResponse(baseResponse.BOARD_BOARDID_EMPTY));
+  const postId = req.params.boardId;
+  if (!postId) return res.send(errResponse(baseResponse.BOARD_BOARDID_EMPTY));
 
-  const boardResult = await boardService.retrieveBoard(boardId);
+  const boardResult = await boardService.retrieveBoard(postId);
   return res.send(response(baseResponse.SUCCESS, boardResult));
 };
 
 // 3. 게시글 삭제
 exports.deleteBoard = async function (req, res) {
-  const boardId = req.params.boardId;
-  const deleteBoard = await boardService.deleteBoard(boardId);
+  const postId = req.params.boardId;
+  const deleteBoard = await boardService.deleteBoard(postId);
 
   return res.send(deleteBoard);
 };
@@ -48,7 +48,7 @@ exports.patchBoard = async function (req, res) {
   // const title = req.params.title
   // const content = req.params.content
   // const price = req.params.price
-  const boardId = req.params.boardId;
+  const postId = req.params.boardId;
   const { title, content, img } = req.body;
   //제목 체크
   if (!title) return res.send(errResponse(baseResponse.BOARD_TITLE_EMPTY));
@@ -56,7 +56,7 @@ exports.patchBoard = async function (req, res) {
   if (!content) return res.send(errResponse(baseResponse.BOARD_CONTENT_EMPTY));
 
   const editBoardInfo = await boardService.editBoard(
-    boardId,
+    postId,
     title,
     content,
     img
