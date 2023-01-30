@@ -16,10 +16,10 @@ const {connect} = require("http2");
 
 
 // 후기 생성 
-exports.createReview = async function (userId,nickname,walkId,reviewContent, createdAt) {
+exports.createReview = async function (userId,walkId,nickname,reviewContent) {
     try {
 
-        const insertReviewParams = [userId,walkIreviewContent,createdAt];
+        const insertReviewParams = [userId,walkId,nickname,reviewContent];
 
         const connection = await pool.getConnection(async (conn) => conn);
 
@@ -56,10 +56,10 @@ exports.createFeedback = async function (userId, nickname,walkId, reviewContent,
 };
 
 // 후기 공감
-exports.editReview = async function (walkId,reviewId,createAt){
+exports.editReview = async function (reviewId){
     try {
 
-        const updateReviewParams = [walkId,reviewId,createAt];
+        const updateReviewParams = [reviewId];
         const connection = await pool.getConnection(async (conn)=>conn);
         const editReviewResult = await walkDao.updateReview(connection,updateReviewParams);
 
@@ -70,18 +70,84 @@ exports.editReview = async function (walkId,reviewId,createAt){
     }
 };
 
-// 후기 삭제
-exports.removeReview = async function (walkId,reviewId){
+// 후기 공감 취소
+exports.minusReview = async function (reviewId){
     try {
 
-        const deleteReviewParams = [walkId,reviewId];
+        const minusReviewParams = [reviewId];
         const connection = await pool.getConnection(async (conn)=>conn);
-        const deleteReviewResult = await walkDao.deleteReview(connection,deleteReviewParams)
-        connection.release();
-        console.log('삭제된 후기:' ,deleteReviewResult[0].deleteid);
+        const minusReviewResult = await walkDao.updateMinusReview(connection,minusReviewParams);
+
         return response(baseResponse.SUCCESS);
     } catch (err){
-        logger.err(`App  - deleteReview Service error\n: ${err.message}`);
+        logger.err(`App  - minusReview Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+// 후기 삭제
+exports.removeReview = async function (reviewId){
+    try {
+
+        const deleteReviewParams = [reviewId];
+        const connection = await pool.getConnection(async (conn)=>conn);
+        const deleteReviewResult = await walkDao.deleteReview(connection,deleteReviewParams)
+        //connection.release();
+      //  console.log('삭제된 후기:' ,deleteReviewResult[0].deleteid);
+        return response(baseResponse.SUCCESS);
+    } catch (err){
+        
+       // logger.err(`App  - deleteReview Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+// 피드백 공감
+exports.editFeedback = async function (feedbackId){
+    try {
+
+        const updateFeedbackParams = [feedbackId];
+        const connection = await pool.getConnection(async (conn)=>conn);
+        const editFeedbackResult = await walkDao.updateFeedback(connection,updateFeedbackParams);
+
+        return response(baseResponse.SUCCESS);
+    } catch (err){
+        logger.err(`App  - editFeedback Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+// 피드백 공감 취소
+exports.minusReview = async function (feedbackId){
+    try {
+
+        const minusFeedbackParams = [feedbackId];
+        const connection = await pool.getConnection(async (conn)=>conn);
+        const minusFeedbackResult = await walkDao.minusFeedback(connection,minusFeedbackParams);
+
+        return response(baseResponse.SUCCESS);
+    } catch (err){
+       logger.err(`App  - minusFeedback Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+// 피드백 신고 
+exports.createReport = async function (userId,feedbackId,reportType) {
+    try {
+
+        const insertReportParams = [userId,feedbackId,reportType];
+
+        const connection = await pool.getConnection(async (conn) => conn);
+
+        const reportPostResult = await walkDao.insertReport(connection, insertReportParams);
+   //     console.log(`추가된 신고 : ${reportPostResult[0].reportId}`)
+        connection.release();
+        return response(baseResponse.SUCCESS);
+
+
+    } catch (err) {
+        logger.error(`App - createReport Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);
     }
 };

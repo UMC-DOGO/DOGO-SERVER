@@ -14,14 +14,46 @@ exports.retrieveWalkList = async function (regionId) {
   
   };
 
+  exports.retrieveStartList = async function (walkId) {
+
+    const connection = await pool.getConnection(async (conn) => conn);
+    const walkStartResult = await walkDao.selectWalkStart(connection,walkId);
+    connection.release();
+
+    return walkStartResult;
+
+};
+
+    exports.retrieveEndList = async function (walkId) {
+
+    const connection = await pool.getConnection(async (conn) => conn);
+    const walkEndResult = await walkDao.selectWalkEnd(connection,walkId);
+    connection.release();
+
+    return walkEndResult;
+
+};
+
+    exports.retrieveCourseList = async function (walkId) {
+
+    const connection = await pool.getConnection(async (conn) => conn);
+    const walkCourseResult = await walkDao.selectWalkCoourse(connection,walkId);
+    connection.release();
+
+    return walkCourseResult;
+
+};
+
   exports.retrieveReviewList = async function (walkId) {
 
       const connection = await pool.getConnection(async (conn) => conn);
-      const reviewListResult = await walkDao.selectReview(connection,walkId);
+      const reviewListResult = await walkDao.selectReview(connection, walkId);
       connection.release();
 
       return reviewListResult;
   };
+
+  
 
   
   exports.retriveFeedbackList = async function (walkId) {
@@ -32,3 +64,22 @@ exports.retrieveWalkList = async function (regionId) {
 
       return feedbackListResult;
   };
+
+  exports.retrieveReviewCount = async function (walkId,reviewId) {
+
+    const connection = await pool.getConnection(async (conn) => conn);
+    const reviewCountResult = await walkDao.getReviewInterest(connection,walkId,reviewId);
+    connection.release();
+
+    return reviewCountResult;
+};
+
+
+exports.retriveFeedbackCount = async function (walkId,reviewId) {
+
+    const connection = await pool.getConnection(async (conn) => conn);
+    const feedbackCountResult = await walkDao.getFeedbackInterest(connection,walkId,reviewId);
+    connection.release();
+
+    return feedbackCountResult;
+};
