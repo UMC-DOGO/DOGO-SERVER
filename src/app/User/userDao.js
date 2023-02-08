@@ -20,7 +20,7 @@ async function selectUserEmail(connection, email) {
 }
 
 // userId 회원 조회
-/*
+
 async function selectUserId(connection, userId) {
   const selectUserIdQuery = `
                  SELECT userId, email, nickname 
@@ -49,8 +49,8 @@ async function selectUserPassword(connection, selectUserPasswordParams) {
         FROM UserInfo 
         WHERE email = ? AND password = ?;`;
   const selectUserPasswordRow = await connection.query(
-      selectUserPasswordQuery,
-      selectUserPasswordParams
+    selectUserPasswordQuery,
+    selectUserPasswordParams
   );
   return selectUserPasswordRow;
 }
@@ -61,8 +61,8 @@ async function selectUserAccount(connection, email) {
         FROM UserInfo 
         WHERE email = ?;`;
   const selectUserAccountRow = await connection.query(
-      selectUserAccountQuery,
-      email
+    selectUserAccountQuery,
+    email
   );
   return selectUserAccountRow[0];
 }
@@ -71,9 +71,12 @@ async function updateUserInfo(connection, userId, nickname) {
   UPDATE UserInfo 
   SET nickname = ?
   WHERE userId = ?;`;
-  const updateUserRow = await connection.query(updateUserQuery, [nickname, userId]);
+  const updateUserRow = await connection.query(updateUserQuery, [
+    nickname,
+    userId,
+  ]);
   return updateUserRow[0];
-}*/
+}
 
 ////////////////////
 
@@ -84,7 +87,10 @@ async function updateUserAdd(connection, userId, address) {
   UPDATE user 
   SET address = ?
   WHERE userId = ?;`;
-  const updateUserRow = await connection.query(updateUserQuery, [address, userId]);
+  const updateUserRow = await connection.query(updateUserQuery, [
+    address,
+    userId,
+  ]);
   return updateUserRow[0];
 }
 
@@ -104,7 +110,10 @@ async function updateUserGender(connection, userId, gender) {
   UPDATE user 
   SET gender = ?
   WHERE userId = ?;`;
-  const updateUserRow = await connection.query(updateUserQuery, [gender, userId]);
+  const updateUserRow = await connection.query(updateUserQuery, [
+    gender,
+    userId,
+  ]);
   return updateUserRow[0];
 }
 
@@ -114,7 +123,10 @@ async function updateUserBreed(connection, userId, breed) {
   UPDATE user 
   SET breed = ?
   WHERE userId = ?;`;
-  const updateUserRow = await connection.query(updateUserQuery, [breed, userId]);
+  const updateUserRow = await connection.query(updateUserQuery, [
+    breed,
+    userId,
+  ]);
   return updateUserRow[0];
 }
 
@@ -124,7 +136,10 @@ async function updateUserDogAge(connection, userId, dogAge) {
   UPDATE user 
   SET dogAge = ?
   WHERE userId = ?;`;
-  const updateUserRow = await connection.query(updateUserQuery, [dogAge, userId]);
+  const updateUserRow = await connection.query(updateUserQuery, [
+    dogAge,
+    userId,
+  ]);
   return updateUserRow[0];
 }
 
@@ -150,8 +165,7 @@ async function selectUserPost(connection, userId) {
 
 // API 6. 유저 삭제
 async function deleteUserInfo(connection, userId) {
-  const deleteUserInfoQuery = 
-  `delete from user where userId = ?;`;
+  const deleteUserInfoQuery = `delete from user where userId = ?;`;
   const deleteUserRow = await connection.query(deleteUserInfoQuery, userId);
   return deleteUserRow[0];
 }
@@ -183,7 +197,7 @@ async function insertCommentInfo(connection, insertCommentInfoParams) {
     insertCommentInfoQuery,
     insertCommentInfoParams
   );
-  
+
   return insertPostInfoRow;
 }
 
@@ -196,7 +210,7 @@ async function selectCommentLikeInfo(connection, selectCommentLikeInfoParams) {
     selectCommentLikeInfoQuery,
     selectCommentLikeInfoParams
   );
-  
+
   return selectCommentLikeInfoRow;
 }
 
@@ -209,7 +223,7 @@ async function insertCommentLikeInfo(connection, insertCommentLikeInfoParams) {
     insertCommentLikeInfoQuery,
     insertCommentLikeInfoParams
   );
-  
+
   return insertCommentLikeInfoRow;
 }
 
@@ -221,15 +235,18 @@ async function deleteCommentLikeInfo(connection, deleteCommentLikeInfoParams) {
     deleteCommentLikeInfoQuery,
     deleteCommentLikeInfoParams
   );
-  
+
   return deleteCommentLikeInfoRow[0];
 }
 
 // API 11. 댓글 삭제 (PATCH)
 async function deleteCommentInfo(connection, postId, commentId) {
-  const deleteCommentInfoQuery = 
-  `delete from comment where postId = ? and commentId = ?;`;
-  const deleteCommentRow = await connection.query(deleteCommentInfoQuery, postId, commentId);
+  const deleteCommentInfoQuery = `delete from comment where postId = ? and commentId = ?;`;
+  const deleteCommentRow = await connection.query(
+    deleteCommentInfoQuery,
+    postId,
+    commentId
+  );
   return deleteCommentRow[0];
 }
 
@@ -238,7 +255,11 @@ async function selectPostRecomment(connection, postId, commentId) {
   const selectPostRecommentQuery = `
           SELECT * from reply where postId = ? and commentId = ?;
           `;
-  const [postRecomment] = await connection.query(selectPostRecommentQuery, postId, commentId);
+  const [postRecomment] = await connection.query(
+    selectPostRecommentQuery,
+    postId,
+    commentId
+  );
   return postRecomment;
 }
 
@@ -251,15 +272,19 @@ async function insertRecommentInfo(connection, insertRecommentInfoParams) {
     insertRecommentInfoQuery,
     insertRecommentInfoParams
   );
-  
+
   return insertRecommentInfoRow;
 }
 
 // API 15. 대댓글 삭제 (PATCH)
 async function deleteRecommentInfo(connection, postId, commentId, replyId) {
-  const deleteRecommentInfoQuery = 
-  `delete from reply where postId = ? and commentId = ? and replayId = ?;`;
-  const deleteRecommentRow = await connection.query(deleteRecommentInfoQuery, postId, commentId, replyId);
+  const deleteRecommentInfoQuery = `delete from reply where postId = ? and commentId = ? and replayId = ?;`;
+  const deleteRecommentRow = await connection.query(
+    deleteRecommentInfoQuery,
+    postId,
+    commentId,
+    replyId
+  );
   return deleteRecommentRow[0];
 }
 
@@ -284,5 +309,4 @@ module.exports = {
   deleteRecommentInfo,
   deleteCommentLikeInfo,
   selectCommentLikeInfo,
-
 };
