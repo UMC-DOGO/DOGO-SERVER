@@ -12,9 +12,9 @@ async function selectWalk(connection, regionId) {
 // 산책코스 시작위치 조회 -- 수정하기~~
 async function selectWalkStart(connection, walkId) {
   const selectWalkStartQuery = `
-                SELECT start
-                FROM walk
-                WHERE courseID = ?;
+                SELECT courseLong, courseLat
+                FROM walkStartEnd, walkCourse
+                WHERE walkStartEnd.startID = walkCourse.placeID AND walkStartEnd.courseID = walkCourse.courseID AND courseID = ?;
                 `;
   const [walkStartRows] = await connection.query(selectWalkStartQuery, walkId);
   return walkStartRows;
@@ -23,9 +23,9 @@ async function selectWalkStart(connection, walkId) {
 // 산책코스 도착위치 조회 -- 수정하기~~
 async function selectWalkEnd(connection, walkId) {
   const selectWalkEndQuery = `
-                SELECT start
-                FROM walk
-                WHERE courseID = ?;
+                SELECT courseLong, courseLat
+                FROM walkCourse
+                WHERE walkStartEnd.arriveID = walkCourse.placeID AND walkStartEnd.courseID = walkCourse.courseID AND courseID = ?;
                 `;
   const [walkEndRows] = await connection.query(selectWalkEndQuery, walkId);
   return walkEndRows;
@@ -34,163 +34,187 @@ async function selectWalkEnd(connection, walkId) {
 // 산책코스 경유지 조회 -- 수정하기~~
 async function selectWalkCoourse(connection, walkId) {
   const selectWalkCourseQuery = `
-                SELECT start
-                FROM coursePlace -- 장소 테이블
+                SELECT courseName 
+                FROM walkCourse
                 WHERE walkID = ?;
                 `;
-  const [walkCourseRows] = await connection.query(selectWalkCourseQuery, walkId);
+  const [walkCourseRows] = await connection.query(
+    selectWalkCourseQuery,
+    walkId
+  );
   return walkCourseRows;
 }
 
-
 // 후기 작성
-async function insertReview(connection,insertReviewParams) {
-const insertReviewQuery = `
-                INSERT INTO walkReview(writerID,courseID,nickname,reviewContent)
-                VALUES (?, ?, ?, ?);
+async function insertReview(connection, insertReviewParams) {
+  const insertReviewQuery = `
+                INSERT INTO walkReview(courseID,writerID,reviewContent)
+                VALUES (?, ?, ?);
               `;
-const insertReviewRow = await connection.query(
-  insertReviewQuery,
-  insertReviewParams
-);
+  const insertReviewRow = await connection.query(
+    insertReviewQuery,
+    insertReviewParams
+  );
 
-return insertReviewRow;
+  return insertReviewRow;
 }
 
 // 피드백 작성
-async function insertFeedback(connection,insertFeedbackParams) {
-const insertFeedbackQuery = `
-          INSERT INTO walkFeedback(courseID,writerID,nickname,feedbackContent)
-          VALUES (?, ?, ?, ?);  
+async function insertFeedback(connection, insertFeedbackParams) {
+  const insertFeedbackQuery = `
+          INSERT INTO walkFeedback(courseID,writerID,feedbackContent)
+          VALUES (?, ?, ?);  
               `;
-const insertFeedbackwRow = await connection.query(
-  insertFeedbackQuery,
-  insertFeedbackParams
-);
+  const insertFeedbackwRow = await connection.query(
+    insertFeedbackQuery,
+    insertFeedbackParams
+  );
 
-return insertFeedbackwRow;
+  return insertFeedbackwRow;
 }
 
 // 후기 공감
-
-async function updateReview(connection,updateReviewParams){
-const updateReviewQuery = `
+async function updateReview(connection, updateReviewParams) {
+  const updateReviewQuery = `
           UPDATE walkReview
           SET interestCount = interestCount + 1
           WHERE reviewID = ?;
           `;
-const updateReviewRow = await connection.query(updateReviewQuery,updateReviewParams);
-return updateReviewRow[0];
+  const updateReviewRow = await connection.query(
+    updateReviewQuery,
+    updateReviewParams
+  );
+  return updateReviewRow[0];
 }
-
 
 // 후기 공감 취소
 
-async function updateMinusReview(connection,minusReviewParams){
-const minusReviewQuery = `
+async function updateMinusReview(connection, minusReviewParams) {
+  const minusReviewQuery = `
           UPDATE walkReview
           SET interestCount = interestCount -1
           WHERE interestCount > 0 AND reviewID = ?;
           `;
-const minusReviewRow = await connection.query(minusReviewQuery,minusReviewParams);
-return minusReviewRow[0];
+  const minusReviewRow = await connection.query(
+    minusReviewQuery,
+    minusReviewParams
+  );
+  return minusReviewRow[0];
 }
 
 // 피드백 공감
 
-async function updateFeedback(connection,updateFeedbackParams){
-const updateFeedbackQuery = `
+async function updateFeedback(connection, updateFeedbackParams) {
+  const updateFeedbackQuery = `
           UPDATE walkFeedback
           SET interestCount = interestCount + 1
           WHERE interestCount > 0 AND feedbackID = ?;
           `;
-const updateFeedbackRow = await connection.query(updateFeedbackQuery,updateFeedbackParams);
-return updateFeedbackRow[0];
+  const updateFeedbackRow = await connection.query(
+    updateFeedbackQuery,
+    updateFeedbackParams
+  );
+  return updateFeedbackRow[0];
 }
-
 
 // 피드백 공감 취소
 
-async function minusFeeback(connection,minusReviewParams){
-const minusFeedbackQuery = `
+async function minusFeeback(connection, minusFeedbackParams) {
+  const minusFeedbackQuery = `
           UPDATE walkFeedback
           SET interestCount = interestCount -1
           WHERE interestCount > 0 AND FeedbackID = ?;
           `;
-const minusFeedbackRow = await connection.query(minusFeedbackQuery,minusFeedbackParams);
-return minusReviewRow[0];
+  const minusFeedbackRow = await connection.query(
+    minusFeedbackQuery,
+    minusFeedbackParams
+  );
+  return minusFeedbackRow[0];
 }
 
-
 // 후기 조회
-async function selectReview(connection,walkId) {
-const selectReviewListQuery = `
+async function selectReview(connection, walkId) {
+  const selectReviewListQuery = `
               SELECT nickname, reviewContent
               FROM walkReview
-              WHERE courseID = ?;
+              WHERE courseID = ?
+              ORDER BY walkReview.createAt;
               `;
-const [reviewRows] = await connection.query(selectReviewListQuery,walkId);
-return reviewRows;
+  const [reviewRows] = await connection.query(selectReviewListQuery, walkId);
+  return reviewRows;
 }
 
 // 피드백 조회
-async function selectFeedback(connection,walkId) {
-const selectFeedbackListQuery = `
-              SELECT writername, feedbackContent
-              FROM walkFeedback
-              WHERE courseID = ? ;
+async function selectFeedback(connection, walkId) {
+  const selectFeedbackListQuery = `
+              SELECT userInfo.nickname, feedbackContent
+              FROM walkFeedback, userInfo
+              WHERE walkFeedback.writerID = userInfo.userId AND courseID = ?
+              ORDER BY walkFeedback.createAt;
               `;
-const [feedbackRows] = await connection.query(selectFeedbackListQuery,walkId);
-return feedbackRows;
+  const [feedbackRows] = await connection.query(
+    selectFeedbackListQuery,
+    walkId
+  );
+  return feedbackRows;
 }
-
 
 // 후기 삭제
 async function deleteReview(connection, deleteReviewParams) {
-const deleteReviewQuery = `
-              SET SQL_SAFE_UPDATES=0;
-              DELTE FROM walkReview
+  const deleteReviewQuery = `
+              DELETE FROM walkReview
               WHERE reviewID = ?;
               `;
-const deleteReviewRow = await connection.query(deleteReviewQuery,deleteReviewParams);
-return deleteReviewRow[0];
+  const deleteReviewRow = await connection.query(
+    deleteReviewQuery,
+    deleteReviewParams
+  );
+  return deleteReviewRow[0];
 }
 
 // 피드백 삭제
 async function deleteFeedback(connection, deleteFeedbackParams) {
-const deleteFeedbackQuery = `
-              DELTE FROM walkFeedback
-              WHERE courseID = ? AND reviewID = ?;
+  const deleteFeedbackQuery = `
+              DELETE FROM walkFeedback
+              WHERE feedbackID = ?;
               `;
-const deleteFeedbackwRow = await connection.query(deleteFeedbackQuery,deleteFeedbackParams);
-return deleteFeedbackRow[0];
+  const deleteFeedbackRow = await connection.query(
+    deleteFeedbackQuery,
+    deleteFeedbackParams
+  );
+  return deleteFeedbackRow[0];
 }
 
 // 후기 공감 개수 조회
-async function getReviewInterest(connection) {
-const selectReviewInterestQuery = `
+async function getReviewInterest(connection, reviewId) {
+  const selectReviewInterestQuery = `
               SELECT interestCount
               FROM walkReview
-              WHERE walkID = ? AND reviewID = ?;
+              WHERE reviewID = ?;
               `;
-const [reviewInterestRows] = await connection.query(selectReviewInterestQuery);
-return reviewInterestRows;
+  const [reviewInterestRows] = await connection.query(
+    selectReviewInterestQuery,
+    reviewId
+  );
+  return reviewInterestRows;
 }
 
 // 피드백 공감 개수 조회
-async function getFeedbackInterest(connection) {
-const selectFeedbackInterestQuery = `
+async function getFeedbackInterest(connection, feedbackId) {
+  const selectFeedbackInterestQuery = `
               SELECT interestCount
               FROM walkFeedback
-              WHERE walkID = ? AND feedbackID = ?;
+              WHERE feedbackID = ?;
               `;
-const [feedbackInterestRows] = await connection.query(selectFeedbackInterestQuery);
-return reviewFeedbackRows;
+  const [feedbackInterestRows] = await connection.query(
+    selectFeedbackInterestQuery,
+    feedbackId
+  );
+  return feedbackInterestRows;
 }
 
-
 // 피드백 신고
-async function insertReport(connection,insertReportParams) {
+async function insertReport(connection, insertReportParams) {
   const insertReportQuery = `
                   INSERT INTO Report(userID,feedbackID,reportType)
                   VALUES (?, ?, ?);
@@ -199,23 +223,23 @@ async function insertReport(connection,insertReportParams) {
     insertReportQuery,
     insertReportParams
   );
-  
-  return insertReportRow;
-  }
 
-module.exports={
-selectWalk,
-insertReview,
-insertFeedback,
-updateReview,
-updateFeedback,
-selectReview,
-selectFeedback,
-deleteReview,
-deleteFeedback,
-getReviewInterest,
-getFeedbackInterest,
-minusFeeback,
-updateMinusReview,
-insertReport
+  return insertReportRow;
 }
+
+module.exports = {
+  selectWalk,
+  insertReview,
+  insertFeedback,
+  updateReview,
+  updateFeedback,
+  selectReview,
+  selectFeedback,
+  deleteReview,
+  deleteFeedback,
+  getReviewInterest,
+  getFeedbackInterest,
+  minusFeeback,
+  updateMinusReview,
+  insertReport,
+};
