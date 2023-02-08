@@ -150,6 +150,7 @@ exports.editUserAge = async function (userId, age) {
     }
 }
 
+
 // 유저 프로필 성별 수정
 exports.editUserGender = async function (userId, gender) {
     try {
