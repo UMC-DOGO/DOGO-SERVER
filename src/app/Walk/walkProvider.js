@@ -5,81 +5,80 @@ const walkDao = require("./walkDao");
 
 // Provider: Read 비즈니스 로직 처리
 exports.retrieveWalkList = async function (regionId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const walkListResult = await walkDao.selectWalk(connection, regionId);
+  connection.release();
 
-        const connection = await pool.getConnection(async (conn) => conn);
-        const walkListResult = await walkDao.selectWalk(connection,regionId);
-        connection.release();
-    
-        return walkListResult;
-  
-  };
-
-  exports.retrieveStartList = async function (walkId) {
-
-    const connection = await pool.getConnection(async (conn) => conn);
-    const walkStartResult = await walkDao.selectWalkStart(connection,walkId);
-    connection.release();
-
-    return walkStartResult;
-
+  return walkListResult;
 };
 
-    exports.retrieveEndList = async function (walkId) {
+//산책코스 시작위치 조회
 
-    const connection = await pool.getConnection(async (conn) => conn);
-    const walkEndResult = await walkDao.selectWalkEnd(connection,walkId);
-    connection.release();
+exports.retrieveStartList = async function (walkId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const walkStartResult = await walkDao.selectWalkStart(connection, walkId);
+  connection.release();
 
-    return walkEndResult;
-
+  return walkStartResult;
 };
 
-    exports.retrieveCourseList = async function (walkId) {
+//산책코스 도착위치 조회
 
-    const connection = await pool.getConnection(async (conn) => conn);
-    const walkCourseResult = await walkDao.selectWalkCoourse(connection,walkId);
-    connection.release();
+exports.retrieveEndList = async function (walkId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const walkEndResult = await walkDao.selectWalkEnd(connection, walkId);
+  connection.release();
 
-    return walkCourseResult;
-
+  return walkEndResult;
 };
 
-  exports.retrieveReviewList = async function (walkId) {
+// 산책코스 경유지 모두 조회
+exports.retrieveCourseList = async function (walkId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const walkCourseResult = await walkDao.selectWalkCoourse(connection, walkId);
+  connection.release();
 
-      const connection = await pool.getConnection(async (conn) => conn);
-      const reviewListResult = await walkDao.selectReview(connection, walkId);
-      connection.release();
-
-      return reviewListResult;
-  };
-
-  
-
-  
-  exports.retriveFeedbackList = async function (walkId) {
-
-      const connection = await pool.getConnection(async (conn) => conn);
-      const feedbackListResult = await walkDao.selectFeedback(connection,walkId);
-      connection.release();
-
-      return feedbackListResult;
-  };
-
-  exports.retrieveReviewCount = async function (walkId,reviewId) {
-
-    const connection = await pool.getConnection(async (conn) => conn);
-    const reviewCountResult = await walkDao.getReviewInterest(connection,walkId,reviewId);
-    connection.release();
-
-    return reviewCountResult;
+  return walkCourseResult;
 };
 
+exports.retrieveReviewList = async function (walkId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const reviewListResult = await walkDao.selectReview(connection, walkId);
+  connection.release();
 
-exports.retriveFeedbackCount = async function (walkId,reviewId) {
+  return reviewListResult;
+};
 
-    const connection = await pool.getConnection(async (conn) => conn);
-    const feedbackCountResult = await walkDao.getFeedbackInterest(connection,walkId,reviewId);
-    connection.release();
+//피드백 리스트 조회
+exports.retriveFeedbackList = async function (walkId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const feedbackListResult = await walkDao.selectFeedback(connection, walkId);
+  connection.release();
 
-    return feedbackCountResult;
+  return feedbackListResult;
+};
+
+// 리뷰 공감 수 조회
+exports.retrieveReviewCount = async function (reviewId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const reviewCountResult = await walkDao.getReviewInterest(
+    connection,
+    reviewId
+  );
+  connection.release();
+
+  return reviewCountResult;
+};
+
+// 피드백 공감 수 조회
+
+exports.retriveFeedbackCount = async function (feedbackId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const feedbackCountResult = await walkDao.getFeedbackInterest(
+    connection,
+    feedbackId
+  );
+  connection.release();
+
+  return feedbackCountResult;
 };
