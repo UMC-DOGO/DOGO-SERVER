@@ -16,10 +16,10 @@ const {connect} = require("http2");
 
 
 // 후기 생성 
-exports.createReview = async function (userId,walkId,nickname,reviewContent) {
+exports.createReview = async function (userId,walkId,reviewContent) {
     try {
 
-        const insertReviewParams = [userId,walkId,nickname,reviewContent];
+        const insertReviewParams = [userId,walkId,reviewContent];
 
         const connection = await pool.getConnection(async (conn) => conn);
 
@@ -30,16 +30,17 @@ exports.createReview = async function (userId,walkId,nickname,reviewContent) {
 
 
     } catch (err) {
-        logger.error(`App - createReview Service error\n: ${err.message}`);
+        console.log(err)
+        // logger.error(`App - createReview Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);
     }
 };
 
 // 피드백 생성 
-exports.createFeedback = async function (userId, nickname,walkId, reviewContent, createAt) {
+exports.createFeedback = async function (walkId,userId,feedbackContent) {
     try {
 
-        const insertFeedbackParams = [userId,nickname,walkId,reviewContent,createAt];
+        const insertFeedbackParams = [walkId,userId,feedbackContent];
 
         const connection = await pool.getConnection(async (conn) => conn);
 
@@ -93,11 +94,10 @@ exports.removeReview = async function (reviewId){
         const connection = await pool.getConnection(async (conn)=>conn);
         const deleteReviewResult = await walkDao.deleteReview(connection,deleteReviewParams)
         //connection.release();
-      //  console.log('삭제된 후기:' ,deleteReviewResult[0].deleteid);
         return response(baseResponse.SUCCESS);
     } catch (err){
-        
-       // logger.err(`App  - deleteReview Service error\n: ${err.message}`);
+     //   console.log(err)
+      // logger.err(`App  - deleteReview Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);
     }
 };
@@ -112,22 +112,24 @@ exports.editFeedback = async function (feedbackId){
 
         return response(baseResponse.SUCCESS);
     } catch (err){
-        logger.err(`App  - editFeedback Service error\n: ${err.message}`);
+        console.log(err);
+      //  logger.err(`App  - editFeedback Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);
     }
 };
 
 // 피드백 공감 취소
-exports.minusReview = async function (feedbackId){
+exports.minusFeedback = async function (feedbackId){
     try {
 
         const minusFeedbackParams = [feedbackId];
         const connection = await pool.getConnection(async (conn)=>conn);
-        const minusFeedbackResult = await walkDao.minusFeedback(connection,minusFeedbackParams);
+     //   const minusFeedbackResult = await walkDao.minusFeedback(connection,minusFeedbackParams);
 
         return response(baseResponse.SUCCESS);
     } catch (err){
-       logger.err(`App  - minusFeedback Service error\n: ${err.message}`);
+        console.log(err);
+  //     logger.err(`App  - minusFeedback Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);
     }
 };

@@ -14,6 +14,8 @@ exports.retrieveWalkList = async function (regionId) {
   
   };
 
+  //산책코스 시작위치 조회 
+
   exports.retrieveStartList = async function (walkId) {
 
     const connection = await pool.getConnection(async (conn) => conn);
@@ -23,6 +25,8 @@ exports.retrieveWalkList = async function (regionId) {
     return walkStartResult;
 
 };
+
+//산책코스 도착위치 조회
 
     exports.retrieveEndList = async function (walkId) {
 
@@ -34,6 +38,7 @@ exports.retrieveWalkList = async function (regionId) {
 
 };
 
+// 산책코스 경유지 모두 조회 
     exports.retrieveCourseList = async function (walkId) {
 
     const connection = await pool.getConnection(async (conn) => conn);
@@ -55,7 +60,7 @@ exports.retrieveWalkList = async function (regionId) {
 
   
 
-  
+  //피드백 리스트 조회
   exports.retriveFeedbackList = async function (walkId) {
 
       const connection = await pool.getConnection(async (conn) => conn);
@@ -65,20 +70,23 @@ exports.retrieveWalkList = async function (regionId) {
       return feedbackListResult;
   };
 
-  exports.retrieveReviewCount = async function (walkId,reviewId) {
+  // 리뷰 공감 수 조회
+  exports.retrieveReviewCount = async function (reviewId) {
 
     const connection = await pool.getConnection(async (conn) => conn);
-    const reviewCountResult = await walkDao.getReviewInterest(connection,walkId,reviewId);
+    const reviewCountResult = await walkDao.getReviewInterest(connection,reviewId);
     connection.release();
 
     return reviewCountResult;
 };
 
 
-exports.retriveFeedbackCount = async function (walkId,reviewId) {
+// 피드백 공감 수 조회
+
+exports.retriveFeedbackCount = async function (feedbackId) {
 
     const connection = await pool.getConnection(async (conn) => conn);
-    const feedbackCountResult = await walkDao.getFeedbackInterest(connection,walkId,reviewId);
+    const feedbackCountResult = await walkDao.getFeedbackInterest(connection,feedbackId);
     connection.release();
 
     return feedbackCountResult;
