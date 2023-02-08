@@ -87,18 +87,16 @@ exports.getUsers = async function (req, res) {
  * [GET] /app/users/{userId}
  */
 exports.getUserById = async function (req, res) {
+  /**
+   * Path Variable: userId
+   */
+  const userId = req.params.userId;
 
-    /**
-     * Path Variable: userId
-     */
-    const userId = req.params.userId;
+  if (!userId) return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
 
-    if (!userId) return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-
-    const userByUserId = await userProvider.retrieveUser(userId);
-    return res.send(response(baseResponse.SUCCESS, userByUserId));
+  const userByUserId = await userProvider.retrieveUser(userId);
+  return res.send(response(baseResponse.SUCCESS, userByUserId));
 };
-
 
 // TODO: After 로그인 인증 방법 (JWT)
 /**
@@ -162,4 +160,244 @@ exports.check = async function (req, res) {
     const userIdResult = req.verifiedToken.userId;
     console.log(userIdResult);
     return res.send(response(baseResponse.TOKEN_VERIFICATION_SUCCESS));
+};
+
+///////////
+/**
+ * API Name : 2. 프로필 수정 (PATCH)
+ * [PATCH] /user/profile/:userId
+ * path variable : userId
+ * body : address / age / gender / breed / dogAge
+ */
+exports.patchUser = async function (req, res) {
+  const userId = req.params.userId;
+  const address = req.body.address;
+  const age = req.body.age;
+  const gender = req.body.gender;
+  const breed = req.body.breed;
+  const dogAge = req.body.dogAge;
+
+  if (address){
+    const editUserAdd = await userService.editUserAddress(userId, address);
+    return res.send(editUserAdd);
+  }
+  if (age){
+    const editUserAge = await userService.editUserAge(userId, age);
+    return res.send(editUserAge);
+  }
+  if (gender){
+    const editUserGend = await userService.editUserGender(userId, gender);
+    return res.send(editUserGend);
+  }
+  if (breed){
+    const editUserBree = await userService.editUserBreed(userId, breed);
+    return res.send(editUserBree);
+  }
+  if (dogAge){
+    const editUserDog = await userService.editUserDogAge(userId, dogAge);
+    return res.send(editUserDog);
+  }
+};
+
+/**
+ * API Name : 3. 유저 프로필 조회 (GET) / 4. 내 프로필 조회 (GET)
+ * [GET] /user/profile/:userId
+ */
+exports.getUserById = async function (req, res) {
+  /**
+   * Path Variable: userId
+   */
+  const userId = req.params.userId;
+  if (!userId) return res.send(errResponse(baseResponse.USER_USERID_NOT_EXIST));
+
+  const userByUserId = await userProvider.retrieveUser(userId);
+  return res.send(response(baseResponse.SUCCESS, userByUserId));
+};
+
+/**
+* API Name : 5. 내가 쓴 글 조회 (GET)
+* [GET] /user/board/{userId}
+* * path variable : userId
+*/
+exports.getMyPost = async function (req, res) {
+   const userId = req.params.userId;
+   if (!userId) res.send(errResponse(baseResponse.USER_POSTING_NOT_EXIST));
+
+   const MyPostList = await userProvider.retrieveUserPostList(userId);
+   return res.send(response(baseResponse.SUCCESS, MyPostList));
+};
+
+/**
+ * API Name : 6. 유저 삭제 (PATCH)
+ * [DELETE] /user/delete/:userId
+ * * path variable : userId
+ */
+exports.deleteUser = async function (req, res) {
+  const userId = req.params.userId;
+  if (!userId) res.send(errResponse(baseResponse.USER_USERID_NOT_EXIST));
+
+  const deleteUserInfo = await userService.deleteUser(userId)
+  return res.send(response(baseResponse.SUCCESS, deleteUserInfo));
+};
+
+/**
+* API Name : 7. 내가 스크랩한 글 조회 (GET)
+* [GET] /user/board/scrap/:userId
+* * path variable : userId
+*/
+exports.getMyScrap = async function (req, res) {
+  const userId = req.params.userId;
+  if (!userId) res.send(errResponse(baseResponse.USER_USERID_NOT_EXIST));
+
+  const MyScrapList = await userProvider.retrieveUserScrapList(userId);
+  return res.send(response(baseResponse.SUCCESS, MyScrapList));
+};
+
+/**
+* API Name : 8. 댓글 전체 조회 (GET)
+* [GET] /comments/:postId
+* * path variable : postId
+*/
+exports.getComment = async function (req, res) {
+  const postId = req.params.postId;
+  if (!postId) res.send(errResponse(baseResponse.USER_POSTING_NOT_EXIST));
+
+  const PostCommentList = await userProvider.retrievePostCommList(postId);
+  return res.send(response(baseResponse.SUCCESS, PostCommentList));
+};
+
+/**
+ * API Name : 9. 댓글 작성 (POST)
+ * [POST] /comments
+ */
+exports.postComment = async function (req, res) {
+
+  /**
+   * Body: content
+   */
+  const postId = req.params.postId;
+  const content = req.body.content;
+  const userId = req.body.userId;
+
+  if (!postId) res.send(errResponse(baseResponse.USER_POSTING_NOT_EXIST));
+  if (!content) res.send(response(baseResponse.SIGNUP_CONTENT_EMPTY));
+  if (!userId) res.send(response(baseResponse.USER_USERID_NOT_EXIST));
+
+  // 길이 체크
+  if (content.length > 100)
+      return res.send(response(baseResponse.SIGNUP_CONTENT_LENGTH));
+
+  const signUpResponse = await userService.createComment(
+      postId,
+      userId,
+      content
+  );
+
+  return res.send(signUpResponse);
+};
+
+/**
+ * API Name : 10. 댓글 좋아요 / 좋아요 취소 (POST)
+ * [POST] /comments/like/:postId/:commentId
+ */
+exports.postLikeComment = async function (req, res) {
+
+  /**
+   * Body: userId
+   */
+  const postId = req.params.postId;
+  const commentId = req.params.commentId;
+  const userId = req.body.userId;
+
+  if (!postId) res.send(errResponse(baseResponse.USER_POSTING_NOT_EXIST));
+  if (!commentId) res.send(response(baseResponse.USER_COMMENT_NOT_EXIST));
+  if (!userId) res.send(response(baseResponse.USER_USERID_NOT_EXIST));
+
+  const signUpResponse = await userService.createCommentLike(
+      postId,
+      commentId,
+      userId
+  );
+
+  return res.send(signUpResponse);
+};
+
+/**
+ * API Name : 11. 댓글 삭제 (PATCH)
+ * [DELETE] /comments/delete/:postId/:commentId
+ * * path variable : postId, commentId
+ */
+exports.deleteComment = async function (req, res) {
+  const postId = req.params.postId;
+  const commentId = req.params.commentId;
+  if (!postId) res.send(errResponse(baseResponse.USER_POSTING_NOT_EXIST));
+  if (!commentId) res.send(errResponse(baseResponse.USER_COMMENT_NOT_EXIST));
+
+  const deleteCommentInfo = await userService.deleteComment(postId, commentId);
+  return res.send(response(baseResponse.SUCCESS, deleteCommentInfo));
+};
+
+/**
+* API Name : 12. 대댓글 전체보기 (GET)
+* [GET] /comments/re/:postId/:commentId
+* * path variable : postId, commentId
+*/
+exports.getRecomment = async function (req, res) {
+  const postId = req.params.postId;
+  const commentId = req.params.commentId;
+  if (!postId) res.send(errResponse(baseResponse.USER_POSTING_NOT_EXIST));
+  if (!commentId) res.send(errResponse(baseResponse.USER_COMMENT_NOT_EXIST));
+
+  const PostReommentList = await userProvider.retrievePostRecommList(postId, commentId);
+  return res.send(response(baseResponse.SUCCESS, PostReommentList));
+};
+
+/**
+ * API Name : 13. 대댓글 작성 (POST)
+ * [POST] /comments/re/:postId/:commentId
+ */
+exports.postRecomment = async function (req, res) {
+
+  /**
+   * Body: content
+   */
+  const postId = req.params.postId;
+  const commentId = req.params.commentId;
+  const userId = req.body.userId;
+  const content = req.body.content;
+
+  if (!postId) res.send(errResponse(baseResponse.USER_POSTING_NOT_EXIST));
+  if (!commentId) res.send(response(baseResponse.USER_COMMENT_NOT_EXIST));
+  if (!userId) res.send(response(baseResponse.USER_USERID_NOT_EXIST));
+  if (!content) res.send(response(baseResponse.SIGNUP_CONTENT_EMPTY));
+
+  // 길이 체크
+  if (content.length > 100)
+      return res.send(response(baseResponse.SIGNUP_CONTENT_LENGTH));
+
+  const signUpResponse = await userService.createRecomment(
+      postId,
+      commentId,
+      userId,
+      content
+  );
+
+  return res.send(signUpResponse);
+};
+
+/**
+ * API Name : 15. 대댓글 삭제 (PATCH)
+ * [DELETE] /comments/delete/:postId/:commentId/:replyId
+ * * path variable : postId, commentId, replyId
+ */
+exports.deleteRecomment = async function (req, res) {
+  const postId = req.params.postId;
+  const commentId = req.params.commentId;
+  const replyId = req.params.replyId;
+  if (!postId) res.send(errResponse(baseResponse.USER_POSTING_NOT_EXIST));
+  if (!commentId) res.send(errResponse(baseResponse.USER_COMMENT_NOT_EXIST));
+  if (!replyId) res.send(errResponse(baseResponse.USER_RECOMMENT_NOT_EXIST));
+
+  const deleteRecommentInfo = await userService.deleteRecomment(postId, commentId, replyId);
+  return res.send(response(baseResponse.SUCCESS, deleteRecommentInfo));
 };
