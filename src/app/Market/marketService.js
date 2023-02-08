@@ -7,13 +7,7 @@ const baseResponse = require("../../../config/baseResponseStatus");
 const { response, errResponse } = require("../../../config/response");
 
 // 0. 마켓 작성
-exports.createMarket = async function (
-  title,
-  content,
-  price,
-  marketImgId,
-  img
-) {
+exports.createMarket = async function (title, content, price, img) {
   try {
     const createMarketParams = [1, title, content, price, img];
 
