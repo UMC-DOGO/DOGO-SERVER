@@ -4,7 +4,7 @@ const { response, errResponse } = require("../../../config/response");
 
 // 0. 마켓 작성
 exports.postMarkets = async function (req, res) {
-  const { title, content, price, img } = req.body;
+  const { title, content, price, marketImgId, img } = req.body;
   //제목 체크
   if (!title) return res.send(errResponse(baseResponse.MARKET_TITLE_EMPTY));
   //내용 체크
