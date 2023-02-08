@@ -2,7 +2,7 @@
 const insertMarket = async (connection, insertMarketParams) => {
   const insertMarketQuery = `
   INSERT INTO marketPosting(userId,title,content,price,img)
-  VALUES(?,?,?,?)`;
+  VALUES(?,?,?,?,?)`;
 
   const insertMarketRow = await connection.query(
     insertMarketQuery,
