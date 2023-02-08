@@ -12,7 +12,6 @@ exports.retrieveUserList = async function (email) {
     connection.release();
 
     return userListResult;
-
   } else {
     const connection = await pool.getConnection(async (conn) => conn);
     const userListResult = await userDao.selectUserEmail(connection, email);
@@ -33,8 +32,8 @@ exports.emailCheck = async function (email) {
 exports.passwordCheck = async function (selectUserPasswordParams) {
   const connection = await pool.getConnection(async (conn) => conn);
   const passwordCheckResult = await userDao.selectUserPassword(
-      connection,
-      selectUserPasswordParams
+    connection,
+    selectUserPasswordParams
   );
   connection.release();
   return passwordCheckResult[0];
@@ -47,7 +46,6 @@ exports.accountCheck = async function (email) {
 
   return userAccountResult;
 };
-
 
 /////////////////////
 
@@ -86,7 +84,10 @@ exports.retrieveUserScrapList = async function (userId) {
 // 댓글 전체 조회
 exports.retrievePostCommList = async function (postId) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const postCommentListResult = await userDao.selectPostComment(connection, postId);
+  const postCommentListResult = await userDao.selectPostComment(
+    connection,
+    postId
+  );
   connection.release();
 
   return postCommentListResult;
@@ -96,7 +97,11 @@ exports.retrievePostCommList = async function (postId) {
 // 대댓글 전체보기
 exports.retrievePostRecommList = async function (postId, commentId) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const postRecommentListResult = await userDao.selectPostRecomment(connection, postId, commentId);
+  const postRecommentListResult = await userDao.selectPostRecomment(
+    connection,
+    postId,
+    commentId
+  );
   connection.release();
 
   return postRecommentListResult;

@@ -31,7 +31,7 @@ const selectBoardId = async (connection, boardId) => {
   const selectBoardIdQuery = `
       SELECT userId,title,content,img,createAt 
       From posting
-      WHERE boardId=?`;
+      WHERE postId=?`;
 
   const [boardRow] = await connection.query(selectBoardIdQuery, boardId);
 
@@ -42,7 +42,7 @@ const selectBoardId = async (connection, boardId) => {
 const deleteBoard = async (connection, boardId) => {
   const deleteBoardQuery = `
       DELETE FROM posting
-      WHERE boardId=?
+      WHERE postId=?
     `;
 
   const deleteBoardResult = await connection.query(deleteBoardQuery, boardId);
@@ -54,7 +54,7 @@ const patchBoard = async (connection, boardId, title, content, img) => {
   const patchBoardQuery = `
       UPDATE posting
       SET title = ?,content=?,img=?
-      WHERE boardId=?
+      WHERE postId=?
     `;
 
   const patchBoardResult = await connection.query(patchBoardQuery, [
