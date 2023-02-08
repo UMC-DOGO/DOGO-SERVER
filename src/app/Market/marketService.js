@@ -15,7 +15,7 @@ exports.createMarket = async function (
   img
 ) {
   try {
-    const createMarketParams = [1, title, content, price, marketImgId, img];
+    const createMarketParams = [1, title, content, price, img];
 
     const connection = await pool.getConnection(async (conn) => conn);
 
