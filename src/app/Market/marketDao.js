@@ -1,8 +1,8 @@
 //0.중고시장 게시글 작성
 const insertMarket = async (connection, insertMarketParams) => {
   const insertMarketQuery = `
-  INSERT INTO marketPosting(userId,title,content,price,marketImgId,img)
-  VALUES(?,?,?,?,?,?)`;
+  INSERT INTO marketPosting(userId,title,content,price,img)
+  VALUES(?,?,?,?,?)`;
 
   const insertMarketRow = await connection.query(
     insertMarketQuery,
