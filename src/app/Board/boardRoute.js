@@ -1,6 +1,5 @@
 module.exports = function (app) {
   const board = require("./boardController");
-
   // 0. 커뮤니티 작성
   app.post("/board", board.postBoards);
   // 1. 커뮤니티 조회
@@ -13,5 +12,5 @@ module.exports = function (app) {
   // 4. 커뮤니티 수정
   app.patch("/board/:boardId", board.patchBoard);
   //5. 게시물 신고
-  app.patch("")
+  app.patch("");
 };

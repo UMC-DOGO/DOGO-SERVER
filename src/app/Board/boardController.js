@@ -45,9 +45,6 @@ exports.deleteBoard = async function (req, res) {
 
 // 4. 게시글 수정
 exports.patchBoard = async function (req, res) {
-  // const title = req.params.title
-  // const content = req.params.content
-  // const price = req.params.price
   const postId = req.params.boardId;
   const { title, content, img } = req.body;
   //제목 체크
