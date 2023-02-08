@@ -9,7 +9,7 @@ const { response, errResponse } = require("../../../config/response");
 // 0. 마켓 작성
 exports.createMarket = async function (title, content, price, img) {
   try {
-    const createMarketParams = [title, content, price, img];
+    const createMarketParams = [1, title, content, price, img];
 
     const connection = await pool.getConnection(async (conn) => conn);
 

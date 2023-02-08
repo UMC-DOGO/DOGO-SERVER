@@ -11,7 +11,7 @@ const { response, errResponse } = require("../../../config/response");
 // 0. 게시글 작성
 exports.createBoard = async function (title, content, img) {
   try {
-    const createBoardParams = [title, content, img];
+    const createBoardParams = [1, title, content, img];
 
     const connection = await pool.getConnection(async (conn) => conn);
 
