@@ -9,7 +9,7 @@ const { response, errResponse } = require("../../../config/response");
 // 0. 마켓 작성
 exports.createMarket = async function (title, content, price, img) {
   try {
-    const createMarketParams = [title, content, price, img];
+    const createMarketParams = [1, title, content, price, img];
 
     const connection = await pool.getConnection(async (conn) => conn);
 
@@ -60,7 +60,14 @@ exports.deleteMarket = async function (marketId) {
 };
 
 // 4. 마켓 수정
-exports.editMarket = async function (marketId, title, content, price, img) {
+exports.editMarket = async function (
+  marketId,
+  title,
+  content,
+  price,
+  sale,
+  img
+) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     const editMarketResult = await marketDao.patchMarket(
@@ -69,6 +76,7 @@ exports.editMarket = async function (marketId, title, content, price, img) {
       title,
       content,
       price,
+      sale,
       img
     );
     return response(baseResponse.SUCCESS);

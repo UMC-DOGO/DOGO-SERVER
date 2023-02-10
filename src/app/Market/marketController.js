@@ -51,7 +51,7 @@ exports.patchMarket = async function (req, res) {
   // const content = req.params.content
   // const price = req.params.price
   const marketId = req.params.marketId;
-  const { title, content, price, img } = req.body;
+  const { title, content, price, sale, img } = req.body;
   //제목 체크
   if (!title) return res.send(errResponse(baseResponse.MARKET_TITLE_EMPTY));
   //내용 체크
@@ -64,6 +64,7 @@ exports.patchMarket = async function (req, res) {
     title,
     content,
     price,
+    sale,
     img
   );
   return res.send(editMarketInfo);

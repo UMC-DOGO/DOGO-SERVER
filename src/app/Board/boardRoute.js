@@ -1,6 +1,5 @@
 module.exports = function (app) {
   const board = require("./boardController");
-
   // 0. 커뮤니티 작성
   app.post("/board", board.postBoards);
   // 1. 커뮤니티 조회

@@ -2,8 +2,8 @@
 //0.커뮤니티 게시글 작성
 const insertBoard = async (connection, insertBoardParams) => {
   const insertBoardQuery = `
-    INSERT INTO posting(title,content,img)
-    VALUES(?,?,?)`;
+    INSERT INTO posting(userId,title,content,img)
+    VALUES(?,?,?,?)`;
 
   const insertBoardRow = await connection.query(
     insertBoardQuery,
@@ -17,7 +17,7 @@ const insertBoard = async (connection, insertBoardParams) => {
 const selectBoard = async (connection) => {
   //---join활용해서 유저사는 지역 첨부해야함
   const selectBoardQuery = `
-      SELECT title,content,img,regTime 
+      SELECT userId,title,content,img,createAt 
       From posting`;
 
   const [boardRows] = await connection.query(selectBoardQuery);
@@ -26,31 +26,31 @@ const selectBoard = async (connection) => {
 };
 
 //2.커뮤니티 게시글 세부 조회
-const selectBoardId = async (connection, postId) => {
+const selectBoardId = async (connection, boardId) => {
   //---join활용해서 유저사는 지역 첨부
   const selectBoardIdQuery = `
-      SELECT title,content,img,regTime 
+      SELECT userId,title,content,img,createAt 
       From posting
       WHERE postId=?`;
 
-  const [boardRow] = await connection.query(selectBoardIdQuery, postId);
+  const [boardRow] = await connection.query(selectBoardIdQuery, boardId);
 
   return boardRow;
 };
 
 //3.커뮤니티 게시글 삭제
-const deleteBoard = async (connection, postId) => {
+const deleteBoard = async (connection, boardId) => {
   const deleteBoardQuery = `
       DELETE FROM posting
       WHERE postId=?
     `;
 
-  const deleteBoardResult = await connection.query(deleteBoardQuery, postId);
+  const deleteBoardResult = await connection.query(deleteBoardQuery, boardId);
   return deleteBoardResult;
 };
 
 //4.커뮤니티 게시글 수정
-const patchBoard = async (connection, postId, title, content, img) => {
+const patchBoard = async (connection, boardId, title, content, img) => {
   const patchBoardQuery = `
       UPDATE posting
       SET title = ?,content=?,img=?
@@ -61,7 +61,7 @@ const patchBoard = async (connection, postId, title, content, img) => {
     title,
     content,
     img,
-    postId,
+    boardId,
   ]);
   return patchBoardResult[0];
 };
