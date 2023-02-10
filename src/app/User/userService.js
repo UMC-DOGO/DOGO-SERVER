@@ -106,9 +106,6 @@ exports.postSignIn = async function (email, password) {
       return errResponse(baseResponse.SIGNIN_WITHDRAWAL_ACCOUNT);
     }
 
-    console.log(userInfoRows[0].userId); // DB의 userId
-    console.log(userInfoRows[0]);
-    console.log(userInfoRows[0].status === "활성");
     //토큰 생성 Service
     let token = await jwt.sign(
       {
@@ -121,7 +118,6 @@ exports.postSignIn = async function (email, password) {
         subject: "userInfo",
       } // 유효 기간 365일
     );
-    console.log("userService:token:", token);
 
     return response(baseResponse.SUCCESS, {
       userId: userInfoRows[0].userId,

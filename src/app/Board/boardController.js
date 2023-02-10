@@ -5,6 +5,8 @@ const { response, errResponse } = require("../../../config/response");
 // 0. 게시글 작성
 //카테고리 추가해야함
 exports.postBoards = async function (req, res) {
+  const { userId: userIdFromJWT, nickname: nicknameFromJWT } =
+    req.verifiedToken;
   const { title, content, img } = req.body;
   //제목 체크
   if (!title) return res.send(errResponse(baseResponse.BOARD_TITLE_EMPTY));
@@ -13,6 +15,8 @@ exports.postBoards = async function (req, res) {
   //가격 체크
 
   const postBoardsResponse = await boardService.createBoard(
+    userIdFromJWT,
+    nicknameFromJWT,
     title,
     content,
     img
