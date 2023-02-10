@@ -86,6 +86,7 @@ exports.editMarket = async function (
       sale,
       img
     );
+    connection.release();
     return response(baseResponse.SUCCESS);
   } catch (err) {
     logger.error(`App - editUser Service error\n: ${err.message}`);
@@ -102,6 +103,7 @@ exports.doneMarket = async function (marketId, sale) {
       marketId,
       sale
     );
+    connection.release();
 
     return response(baseResponse.SUCCESS);
   } catch (err) {
