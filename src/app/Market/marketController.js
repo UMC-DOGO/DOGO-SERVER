@@ -76,10 +76,8 @@ exports.patchMarket = async function (req, res) {
 // 5. 마켓 거래완료 버튼
 exports.completeMarket = async function (req, res) {
   const marketId = req.params.marketId;
+  const sale = "거래완료";
 
-  const completeMarketInfo = await marketService.doneMarket(
-    marketId,
-    "거래완료"
-  );
+  const completeMarketInfo = await marketService.doneMarket(marketId, sale);
   return res.send(completeMarketInfo);
 };

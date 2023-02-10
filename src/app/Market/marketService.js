@@ -97,7 +97,7 @@ exports.editMarket = async function (
 exports.doneMarket = async function (marketId, sale) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
-    const doneMarketResult = await marketDao.completeMarket(
+    const doneMarketResult = await marketDao.completeButtonMarket(
       connection,
       marketId,
       sale
