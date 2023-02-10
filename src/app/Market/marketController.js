@@ -81,4 +81,5 @@ exports.completeMarket = async function (req, res) {
     marketId,
     "거래완료"
   );
+  return res.send(completeMarketInfo);
 };
