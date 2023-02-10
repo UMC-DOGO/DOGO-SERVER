@@ -124,9 +124,9 @@ return minusFeedbackRow[0];
 // 후기 조회
 async function selectReview(connection,walkId) {
 const selectReviewListQuery = `
-              SELECT userinfo.nickname, reviewContent
-              FROM walkReview,userinfo
-              WHERE userinfo.userid = walkReview.writerid AND courseID = ?
+              SELECT UserInfo.nickname,reviewContent
+              FROM walkReview,UserInfo
+              WHERE UserInfo.userId = walkReview.writerID AND courseID = ?
               ORDER BY walkReview.createAt;
               `;
 const [reviewRows] = await connection.query(selectReviewListQuery,walkId);
@@ -136,9 +136,9 @@ return reviewRows;
 // 피드백 조회
 async function selectFeedback(connection,walkId) {
 const selectFeedbackListQuery = `
-              SELECT userInfo.nickname, feedbackContent
-              FROM walkFeedback, userInfo
-              WHERE walkFeedback.writerID = userInfo.userId AND courseID = ?
+              SELECT UserInfo.nickname, feedbackContent
+              FROM walkFeedback, UserInfo
+              WHERE walkFeedback.writerID = UserInfo.userId AND courseID = ?
               ORDER BY walkFeedback.createAt;
               `;
 const [feedbackRows] = await connection.query(selectFeedbackListQuery,walkId);
