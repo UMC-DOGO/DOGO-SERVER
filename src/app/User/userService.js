@@ -154,3 +154,107 @@ exports.editUser = async function (userId, nickname) {
     return errResponse(baseResponse.DB_ERROR);
   }
 };
+
+// 댓글 작성
+exports.createComment = async function (postId, userId, content) {
+    try {
+        const insertCommentInfoParams = [postId, userId, content];
+
+        const connection = await pool.getConnection(async (conn) => conn);
+
+        const commentIdResult = await userDao.insertCommentInfo(connection, insertCommentInfoParams);
+        console.log(`추가된 댓글 : ${commentIdResult[0].insertId}`)
+        connection.release();
+        return response(baseResponse.SUCCESS);
+
+
+    } catch (err) {
+        logger.error(`App - createComment Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+// 댓글 좋아요
+exports.createCommentLike = async function (postId, commentId, userId) {
+    try {
+        const insertCommentLikeInfoParams = [postId, commentId, userId];
+        const connection = await pool.getConnection(async (conn) => conn);
+
+        // 좋아요 여부 확인
+        const statusLike = await userDao.selectCommentLikeInfo(connection, insertCommentLikeInfoParams);
+
+        if(statusLike[0][0]){
+            // 좋아요 삭제
+            connection.release();
+            const commentDisLikeResult = await userDao.deleteCommentLikeInfo(connection, insertCommentLikeInfoParams);
+            console.log(commentDisLikeResult);
+            console.log(`삭제된 좋아요`);
+            return response(baseResponse.SUCCESS);
+        }
+        else{
+            // 좋아요 누르기
+            const commentLikeResult = await userDao.insertCommentLikeInfo(connection, insertCommentLikeInfoParams);
+            console.log(commentLikeResult);
+            console.log(`추가된 좋아요 : ${commentLikeResult[0].insertId}`);
+        }
+
+        connection.release();
+        return response(baseResponse.SUCCESS);
+
+
+    } catch (err) {
+        logger.error(`App - createCommentLike Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+// 댓글 삭제
+exports.deleteComment = async function (postId, commentId) {
+    try {
+
+        const connection = await pool.getConnection(async (conn) => conn);
+        await userDao.deleteCommentInfo(connection, postId, commentId)
+        connection.release();
+
+        return response(baseResponse.SUCCESS);
+
+    } catch (err) {
+        logger.error(`App - deleteComment Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+// 답글 작성
+exports.createRecomment = async function (postId, commentId, userId, content) {
+    try {
+        const insertRecommentInfoParams = [postId, commentId, userId, content];
+
+        const connection = await pool.getConnection(async (conn) => conn);
+
+        const recommentIdResult = await userDao.insertRecommentInfo(connection, insertRecommentInfoParams);
+        console.log(`추가된 답글 : ${recommentIdResult[0].insertId}`)
+        connection.release();
+        return response(baseResponse.SUCCESS);
+
+
+    } catch (err) {
+        logger.error(`App - createComment Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};
+
+// 답글 삭제
+exports.deleteRecomment = async function (postId, commentId, replyId) {
+    try {
+
+        const connection = await pool.getConnection(async (conn) => conn);
+        await userDao.deleteRecommentInfo(connection, postId, commentId, replyId)
+        connection.release();
+
+        return response(baseResponse.SUCCESS);
+
+    } catch (err) {
+        logger.error(`App - deleteRecomment Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+};

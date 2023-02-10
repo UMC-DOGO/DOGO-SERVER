@@ -12,5 +12,5 @@ module.exports = function (app) {
   // 4. 커뮤니티 수정
   app.patch("/board/:boardId", board.patchBoard);
   //5. 게시물 신고
-  app.patch("");
+  app.patch("")
 };

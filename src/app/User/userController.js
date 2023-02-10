@@ -87,16 +87,18 @@ exports.getUsers = async function (req, res) {
  * [GET] /app/users/{userId}
  */
 exports.getUserById = async function (req, res) {
-  /**
-   * Path Variable: userId
-   */
-  const userId = req.params.userId;
 
-  if (!userId) return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+    /**
+     * Path Variable: userId
+     */
+    const userId = req.params.userId;
 
-  const userByUserId = await userProvider.retrieveUser(userId);
-  return res.send(response(baseResponse.SUCCESS, userByUserId));
+    if (!userId) return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    const userByUserId = await userProvider.retrieveUser(userId);
+    return res.send(response(baseResponse.SUCCESS, userByUserId));
 };
+
 
 // TODO: After 로그인 인증 방법 (JWT)
 /**

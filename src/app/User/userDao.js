@@ -36,10 +36,7 @@ async function selectUserIntroduce(connection, introduce) {
                 FROM UserInfo 
                 WHERE introduce = ?;
                 `;
-  const [introduceRows] = await connection.query(
-    selectUserIntroduceQuery,
-    introduce
-  );
+  const [introduceRows] = await connection.query(selectUserIntroduceQuery, introduce);
   return introduceRows;
 }
 // 유저 생성
@@ -63,8 +60,8 @@ async function selectUserPassword(connection, selectUserPasswordParams) {
         FROM UserInfo 
         WHERE email = ? AND password = ?;`;
   const selectUserPasswordRow = await connection.query(
-    selectUserPasswordQuery,
-    selectUserPasswordParams
+      selectUserPasswordQuery,
+      selectUserPasswordParams
   );
 
   return selectUserPasswordRow;
@@ -78,8 +75,8 @@ async function selectUserAccount(connection, email) {
         FROM UserInfo 
         WHERE email = ?;`;
   const selectUserAccountRow = await connection.query(
-    selectUserAccountQuery,
-    email
+      selectUserAccountQuery,
+      email
   );
   return selectUserAccountRow[0];
 }
