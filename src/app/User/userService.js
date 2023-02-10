@@ -100,7 +100,7 @@ exports.postSignIn = async function (email, password) {
     // 계정 상태 확인
     const userInfoRows = await userProvider.accountCheck(email);
 
-    if (userInfoRows[0].status === "활성") {
+    if (userInfoRows[0].status === "비활성") {
       return errResponse(baseResponse.SIGNIN_INACTIVE_ACCOUNT);
     } else if (userInfoRows[0].status === "삭제") {
       return errResponse(baseResponse.SIGNIN_WITHDRAWAL_ACCOUNT);
