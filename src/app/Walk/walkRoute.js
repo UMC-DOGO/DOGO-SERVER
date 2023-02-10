@@ -15,10 +15,10 @@ module.exports = function(app){
   app.get('/app/walks/walkcourse/:walkId', walk.getWalkCourse)
 
   // 4. 후기 작성
-  app.post('/app/walk/reviews',walk.postReview)
+  app.post('/app/walk/reviews',jwtMiddleware,walk.postReview)
 
   // 5. 피드백 작성
-  app.post('/app/walks/feedbacks',walk.postFeedback) 
+  app.post('/app/walks/feedbacks',jwtMiddleware,walk.postFeedback) 
 
   // 6. 후기 공감
   app.patch('/app/walk/reviews/addedinterest/:reviewId',walk.patchReviewPlus)
