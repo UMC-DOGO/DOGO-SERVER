@@ -99,7 +99,7 @@ async function updateUserInfo(connection, userId, nickname) {
 // 주소 수정
 async function updateUserAdd(connection, userId, address) {
   const updateUserQuery = `
-  UPDATE user 
+  UPDATE UserInfo 
   SET address = ?
   WHERE userId = ?;`;
   const updateUserRow = await connection.query(updateUserQuery, [
@@ -112,7 +112,7 @@ async function updateUserAdd(connection, userId, address) {
 // 나이 수정
 async function updateUserAge(connection, userId, age) {
   const updateUserQuery = `
-  UPDATE user 
+  UPDATE UserInfo 
   SET age = ?
   WHERE userId = ?;`;
   const updateUserRow = await connection.query(updateUserQuery, [age, userId]);
@@ -122,7 +122,7 @@ async function updateUserAge(connection, userId, age) {
 // 성별 수정
 async function updateUserGender(connection, userId, gender) {
   const updateUserQuery = `
-  UPDATE user 
+  UPDATE UserInfo 
   SET gender = ?
   WHERE userId = ?;`;
   const updateUserRow = await connection.query(updateUserQuery, [
@@ -135,7 +135,7 @@ async function updateUserGender(connection, userId, gender) {
 // 견종 수정
 async function updateUserBreed(connection, userId, breed) {
   const updateUserQuery = `
-  UPDATE user 
+  UPDATE UserInfo 
   SET breed = ?
   WHERE userId = ?;`;
   const updateUserRow = await connection.query(updateUserQuery, [
@@ -148,7 +148,7 @@ async function updateUserBreed(connection, userId, breed) {
 // 강아지 나이 수정
 async function updateUserDogAge(connection, userId, dogAge) {
   const updateUserQuery = `
-  UPDATE user 
+  UPDATE UserInfo 
   SET dogAge = ?
   WHERE userId = ?;`;
   const updateUserRow = await connection.query(updateUserQuery, [
@@ -162,7 +162,7 @@ async function updateUserDogAge(connection, userId, dogAge) {
 async function selectUserId(connection, userId) {
   const selectUserIdQuery = `
                  SELECT userId, email, nickname, address, age, gender, breed, dogAge, introduce, profileImage
-                 FROM user 
+                 FROM UserInfo  
                  WHERE userId = ?;
                  `;
   const [userRow] = await connection.query(selectUserIdQuery, userId);
@@ -180,7 +180,7 @@ async function selectUserPost(connection, userId) {
 
 // API 6. 유저 삭제
 async function deleteUserInfo(connection, userId) {
-  const deleteUserInfoQuery = `delete from user where userId = ?;`;
+  const deleteUserInfoQuery = `delete from UserInfo where userId = ?;`;
   const deleteUserRow = await connection.query(deleteUserInfoQuery, userId);
   return deleteUserRow[0];
 }
