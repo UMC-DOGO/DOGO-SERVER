@@ -16,7 +16,7 @@ const insertMarket = async (connection, insertMarketParams) => {
 const selectMarket = async (connection) => {
   //---join활용해서 유저사는 지역 첨부해야함
   const selectMarketQuery = `
-    SELECT title,price,sale,img,createAt 
+    SELECT userId,title,price,sale,img,createAt 
     From marketPosting`;
 
   const [marketRows] = await connection.query(selectMarketQuery);
@@ -28,7 +28,7 @@ const selectMarket = async (connection) => {
 const selectMarketId = async (connection, marketId) => {
   //---join활용해서 유저사는 지역 첨부
   const selectMarketIdQuery = `
-    SELECT title,content,price,sale,img,createAt 
+    SELECT userId,title,content,price,sale,img,createAt 
     From marketPosting
     WHERE marketId=?`;
 
