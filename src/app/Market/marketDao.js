@@ -77,6 +77,19 @@ const patchMarket = async (
   ]);
   return patchMarketResult[0];
 };
+
+const doneMarket = async (connection, marketId, sale) => {
+  const doneMarketQuery = `
+UPDATE marketPosting
+SET sale=?
+WHERE marketId=?
+`;
+
+  const doneMarketResult = await connection.query(doneMarketQuery, [
+    marketId,
+    sale,
+  ]);
+};
 //채팅창 리스트 조회
 //각 채팅창 별 마지막 채팅 조회
 //채팅 상대 프로필 조회
@@ -87,4 +100,5 @@ module.exports = {
   selectMarketId,
   deleteMarket,
   patchMarket,
+  doneMarket,
 };
