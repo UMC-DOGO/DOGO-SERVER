@@ -1,8 +1,9 @@
 module.exports = function (app) {
+  const jwtMiddleware = require("../../../config/jwtMiddleware");
   const market = require("./marketController");
 
   // 0. 마켓 작성
-  app.post("/market", market.postMarkets);
+  app.post("/market", jwtMiddleware, market.postMarkets);
   // 1. 마켓 조회
   app.get("/market", market.getMarkets);
 
