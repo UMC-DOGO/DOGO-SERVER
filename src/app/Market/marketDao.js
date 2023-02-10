@@ -89,6 +89,8 @@ WHERE marketId=?
     marketId,
     sale,
   ]);
+
+  return completeMarketResult[0];
 };
 //채팅창 리스트 조회
 //각 채팅창 별 마지막 채팅 조회
