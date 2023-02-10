@@ -20,7 +20,7 @@ const selectMarket = async (connection) => {
     From marketPosting`;
 
   const [marketRows] = await connection.query(selectMarketQuery);
-
+  console.log("marketDao:pm2실험용 코드");
   return marketRows;
 };
 
@@ -86,8 +86,8 @@ WHERE marketId=?
 `;
 
   const completeMarketResult = await connection.query(doneMarketQuery, [
-    marketId,
     sale,
+    marketId,
   ]);
 
   return completeMarketResult[0];
