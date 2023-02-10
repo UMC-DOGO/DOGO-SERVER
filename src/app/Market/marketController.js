@@ -4,7 +4,8 @@ const { response, errResponse } = require("../../../config/response");
 
 // 0. 마켓 작성
 exports.postMarkets = async function (req, res) {
-  const userIdFromJWT = req.verifiedToken.userId;
+  const { userId: userIdFromJWT, nickname: nicknameFromJWT } =
+    req.verifiedToken;
   const { title, content, price, img } = req.body;
   //제목 체크
   if (!title) return res.send(errResponse(baseResponse.MARKET_TITLE_EMPTY));
@@ -15,6 +16,7 @@ exports.postMarkets = async function (req, res) {
 
   const postMarketsResponse = await marketService.createMarket(
     userIdFromJWT,
+    nicknameFromJWT,
     title,
     content,
     price,
