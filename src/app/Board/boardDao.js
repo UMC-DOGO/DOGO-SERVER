@@ -2,8 +2,8 @@
 //0.커뮤니티 게시글 작성
 const insertBoard = async (connection, insertBoardParams) => {
   const insertBoardQuery = `
-    INSERT INTO posting(userId,title,content,img)
-    VALUES(?,?,?,?)`;
+    INSERT INTO posting(userId,nickname,title,content,img)
+    VALUES(?,?,?,?,?)`;
 
   const insertBoardRow = await connection.query(
     insertBoardQuery,
@@ -17,7 +17,7 @@ const insertBoard = async (connection, insertBoardParams) => {
 const selectBoard = async (connection) => {
   //---join활용해서 유저사는 지역 첨부해야함
   const selectBoardQuery = `
-      SELECT userId,title,content,img,createAt 
+      SELECT userId,nickname,title,content,img,createAt 
       From posting`;
 
   const [boardRows] = await connection.query(selectBoardQuery);
@@ -29,7 +29,7 @@ const selectBoard = async (connection) => {
 const selectBoardId = async (connection, boardId) => {
   //---join활용해서 유저사는 지역 첨부
   const selectBoardIdQuery = `
-      SELECT userId,title,content,img,createAt 
+      SELECT userId,nickname,title,content,img,createAt 
       From posting
       WHERE postId=?`;
 

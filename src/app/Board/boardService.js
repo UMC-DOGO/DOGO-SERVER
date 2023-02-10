@@ -9,9 +9,9 @@ const { response, errResponse } = require("../../../config/response");
 //나중에-카테고리 여러개면 배열로전달이올텐데 db에 복수저장이가능한가
 //사는지역 추가
 // 0. 게시글 작성
-exports.createBoard = async function (title, content, img) {
+exports.createBoard = async function (userId, nickname, title, content, img) {
   try {
-    const createBoardParams = [1, title, content, img];
+    const createBoardParams = [userId, nickname, title, content, img];
 
     const connection = await pool.getConnection(async (conn) => conn);
 

@@ -1,7 +1,8 @@
 module.exports = function (app) {
   const board = require("./boardController");
+  const jwtMiddleware = require("../../../config/jwtMiddleware");
   // 0. 커뮤니티 작성
-  app.post("/board", board.postBoards);
+  app.post("/board", jwtMiddleware, board.postBoards);
   // 1. 커뮤니티 조회
   app.get("/board", board.getBoards);
 
@@ -12,5 +13,5 @@ module.exports = function (app) {
   // 4. 커뮤니티 수정
   app.patch("/board/:boardId", board.patchBoard);
   //5. 게시물 신고
-  app.patch("")
+  app.patch("");
 };
