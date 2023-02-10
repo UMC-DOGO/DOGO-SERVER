@@ -81,7 +81,7 @@ exports.retrieveWalkList = async function (regionId) {
 };
 
 
-// 피드백 공감 수 조회
+// 피드백 공감 개수 조회
 
 exports.retriveFeedbackCount = async function (feedbackId) {
 

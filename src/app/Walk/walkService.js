@@ -102,6 +102,22 @@ exports.removeReview = async function (reviewId){
     }
 };
 
+// 피드백 삭제
+exports.removeFeedback = async function (feedbackId){
+  try {
+
+      const deleteFeedbackParams = [feedbackId];
+      const connection = await pool.getConnection(async (conn)=>conn);
+      const removeFeedbackResult = await walkDao.deleteFeedback(connection,deleteFeedbackParams);
+      //connection.release();
+      return response(baseResponse.SUCCESS);
+  } catch (err){
+   //   console.log(err)
+    // logger.err(`App  - deleteReview Service error\n: ${err.message}`);
+      return errResponse(baseResponse.DB_ERROR);
+  }
+};
+
 // 피드백 공감
 exports.editFeedback = async function (feedbackId){
     try {

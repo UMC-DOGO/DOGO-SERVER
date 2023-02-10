@@ -245,12 +245,12 @@ exports.patchFeedbackPlus = async function (req,res){
  * path variable: feedbackId
  */
 
-exports.deleteFeedback= async function (req,res) {
+exports.deleteFeedback = async function (req,res) {
 
     const feedbackId = req.params.feedbackId;
   
-    const removeFeedback = await walkService.removeFeedback(feedbackId)
-    return res.send(removeFeedback);
+    const removeFeedbackResult = await walkService.removeFeedback(feedbackId)
+    return res.send(removeFeedbackResult);
 };
 
 
@@ -282,11 +282,11 @@ exports.getFeedbackInterest = async function (req,res) {
     const feedbackId = req.params.feedbackId;
 
     const feedbackCountByWalkId = await walkProvider.retriveFeedbackCount(feedbackId)
-    return res.send(response(baseResponse.SUCCESS, feedbackCountByWalkId));
+    return res.send(response(baseResponse.SUCCESS,feedbackCountByWalkId));
 };
 
 /**
- * API No. 15
+ * API No. 16
  * API Name : 피드백 신고 API
  * [POST] /app/walk/feedbacks/report
  * body: userId,feedbackId,reportType
