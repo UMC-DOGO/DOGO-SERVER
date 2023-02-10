@@ -100,15 +100,15 @@ exports.postSignIn = async function (email, password) {
     // 계정 상태 확인
     const userInfoRows = await userProvider.accountCheck(email);
 
-    if (userInfoRows[0].status === "INACTIVE") {
+    if (userInfoRows[0].status === "활성") {
       return errResponse(baseResponse.SIGNIN_INACTIVE_ACCOUNT);
-    } else if (userInfoRows[0].status === "DELETED") {
+    } else if (userInfoRows[0].status === "삭제") {
       return errResponse(baseResponse.SIGNIN_WITHDRAWAL_ACCOUNT);
     }
 
     console.log(userInfoRows[0].userId); // DB의 userId
     console.log(userInfoRows[0]);
-
+    console.log(userInfoRows[0].status === "활성");
     //토큰 생성 Service
     let token = await jwt.sign(
       {
