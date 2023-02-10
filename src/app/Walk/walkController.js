@@ -82,17 +82,16 @@ exports.getWalkCourse = async function (req, res){
  */
 exports.postReview = async function (req, res) {
 
- 
-
-     const {walkId,userId,reviewContent} = req.body;
+    const {userId : userIdFromJWT } = req.verifiedToken;
+     const {walkId,reviewContent} = req.body;
 
      // 빈 값 체크 
     // if (!reviewContent)
      //  return res.send(response(baseResponse.WALK_REVIEWCONTENT_EMPTY))
     
     const reviewResponse = await walkService.createReview(
+        userIdFromJWT,
         walkId,
-        userId,
         reviewContent
     );
 
@@ -113,14 +112,15 @@ exports.postFeedback = async function (req, res) {
      * Body: walkId,userId,feedbackContent
      */
 
-     const {walkId,userId,feedbackContent} = req.body;
+    const {userId : userIdFromJWT } = req.verifiedToken;
+    const {walkId,feedbackContent} = req.body;
      // 빈 값 체크 
      //if (!feedbackContent)
        // return res.send(response(baseResponse.WALK_FEEDBACKONTENT_EMPTY)) 
     
     const feedbackResponse = await walkService.createFeedback(
+        userIdFromJWT,
         walkId,
-        userId,
         feedbackContent
     );
 
