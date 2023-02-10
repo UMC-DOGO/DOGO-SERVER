@@ -13,4 +13,6 @@ module.exports = function (app) {
   app.delete("/market/:marketId", market.deleteMarket);
   // 4. 마켓 수정
   app.patch("/market/:marketId", market.patchMarket);
+  // 5. 마켓 거래완료 버튼
+  app.patch("/market/complete/:marketId", market.completeMarket);
 };

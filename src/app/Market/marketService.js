@@ -92,3 +92,20 @@ exports.editMarket = async function (
     return errResponse(baseResponse.DB_ERROR);
   }
 };
+
+// 5. 마켓 거래완료 버튼
+exports.doneMarket = async function (marketId, sale) {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const doneMarketResult = await marketDao.completeMarket(
+      connection,
+      marketId,
+      sale
+    );
+
+    return response(baseResponse.SUCCESS);
+  } catch (err) {
+    logger.error(`App - editUser Service error\n: ${err.message}`);
+    return errResponse(baseResponse.DB_ERROR);
+  }
+};
