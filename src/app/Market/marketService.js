@@ -7,9 +7,16 @@ const baseResponse = require("../../../config/baseResponseStatus");
 const { response, errResponse } = require("../../../config/response");
 
 // 0. 마켓 작성
-exports.createMarket = async function (userId, title, content, price, img) {
+exports.createMarket = async function (
+  userId,
+  nickname,
+  title,
+  content,
+  price,
+  img
+) {
   try {
-    const createMarketParams = [userId, title, content, price, img];
+    const createMarketParams = [userId, nickname, title, content, price, img];
 
     const connection = await pool.getConnection(async (conn) => conn);
 
