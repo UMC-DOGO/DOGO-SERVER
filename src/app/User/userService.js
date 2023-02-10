@@ -10,6 +10,7 @@ const { errResponse } = require("../../../config/response");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const { connect } = require("http2");
+const { userInfo } = require("os");
 
 // Service: Create, Update, Delete 비즈니스 로직 처리
 
@@ -106,6 +107,7 @@ exports.postSignIn = async function (email, password) {
     }
 
     console.log(userInfoRows[0].userId); // DB의 userId
+    console.log(userInfoRows[0]);
 
     //토큰 생성 Service
     let token = await jwt.sign(
