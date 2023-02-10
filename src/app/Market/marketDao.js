@@ -78,14 +78,14 @@ const patchMarket = async (
   return patchMarketResult[0];
 };
 
-const doneMarket = async (connection, marketId, sale) => {
+const completeButtonMarket = async (connection, marketId, sale) => {
   const doneMarketQuery = `
 UPDATE marketPosting
 SET sale=?
 WHERE marketId=?
 `;
 
-  const doneMarketResult = await connection.query(doneMarketQuery, [
+  const completeMarketResult = await connection.query(doneMarketQuery, [
     marketId,
     sale,
   ]);
@@ -100,5 +100,5 @@ module.exports = {
   selectMarketId,
   deleteMarket,
   patchMarket,
-  doneMarket,
+  completeButtonMarket,
 };
